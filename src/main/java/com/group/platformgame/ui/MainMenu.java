@@ -1,23 +1,29 @@
+package main.java.com.group.platformgame.ui;
+import main.java.com.group.platformgame.utils.PanelBuilder;
+
 import javax.swing.*;
-import java.awt.Layout;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 
-public class MainMenu extend JPanel{
-  GridBagConstraints layout = new GridBagConstraints();
+public class MainMenu extends JPanel{
 
-  JLabel menuTitle = new JLabel("Main Menu");
+  public MainMenu(){
+    this.setLayout(new GridBagLayout());
 
-  JButton exitButton = new JButton ("Exit");
+    GridBagConstraints layout = new GridBagConstraints();
+    layout.anchor = GridBagConstraints.LINE_START;
+    layout.insets = new Insets(5, 5, 5, 5);
 
-  layout.insets = [5, 5, 5, 5];
+    JLabel menuTitle = new JLabel("Main Menu");
 
-  layout.gridx = 0;
-  layout.gridy = 0;
-  add(menuTitle, layout);
-  
-  layout.gridx = 0;
-  layout.gridy = 1;
-  add(exitButton, layout);
+    JButton exitButton = new JButton ("Exit");
 
+
+    PanelBuilder.changeCords(layout, 0, 0);
+    add(menuTitle, layout);
+    
+    PanelBuilder.changeCords(layout, 0, 1);
+    add(exitButton, layout);
+
+  }
   
 }
