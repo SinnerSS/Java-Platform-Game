@@ -17,6 +17,10 @@ public class MainMenu extends JPanel{
 
     JButton exitButton = new JButton ("Exit");
 
+    exitButton.addActionListener((event) -> {
+      System.exit(0);
+    });
+
 
     PanelBuilder.changeCords(layout, 0, 0);
     add(menuTitle, layout);
