@@ -15,6 +15,8 @@ public class MainMenu extends JPanel{
 
     JLabel menuTitle = new JLabel("Main Menu");
 
+    JButton startButton = new JButton("Start");
+
     JButton exitButton = new JButton ("Exit");
 
     exitButton.addActionListener((event) -> {
@@ -26,6 +28,9 @@ public class MainMenu extends JPanel{
     add(menuTitle, layout);
     
     PanelBuilder.changeCords(layout, 0, 1);
+    add(startButton, layout);
+
+    PanelBuilder.changeCords(layout, 0, 2);
     add(exitButton, layout);
 
   }
