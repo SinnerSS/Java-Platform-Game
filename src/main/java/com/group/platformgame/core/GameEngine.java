@@ -4,15 +4,13 @@ import javax.swing.JFrame;
 import main.java.com.group.platformgame.ui.MainMenu;
 
 public class GameEngine extends JFrame{
+  private GameWindow gameWindow;
   public GameEngine() {
-    setTitle("Platform Game");
-    setSize(1280, 1024);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    gameWindow = new GameWindow();
 
     MainMenu mainMenu = new MainMenu();
-    
-    getContentPane().add(mainMenu);
-    setVisible(true);
 
+
+    gameWindow.getContentPane().add(mainMenu);
   }
 }
