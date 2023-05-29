@@ -1,58 +1,41 @@
 package main.java.com.group.platformgame.levels;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Map;
-import java.util.HashMap;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class LevelParser {
-  private Map<String,String> levelData;
-
-  public LevelParser() {
-    levelData = new HashMap<>();
-  }
-
-  public void parseFile(String fileName) {
-    try(InputStream inputStream = getClass().getResourceAsStream("/resources/levels/" + fileName);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
-      String line;
-      String section = null;
-
-      while((line = reader.readLine()) != null) {
-        line = line.trim();
-
-        if(line.startsWith("#") || line.isEmpty()) continue;
-
-        if(line.startsWith("[")) {
-          section = line.substring(1, line.length() - 1);
-          continue;
-        }
-
-        int equalIndex = line.indexOf("=");
-        if(equalIndex == -1) {
-          throw new IllegalArgumentException("Invalid line: " + line);
-        }
-
-        String key = line.substring(0, equalIndex);
-        String value = line.substring(equalIndex + 1);
-
-        String fullKey = (section != null) ? section + "." + key : key;
-        levelData.put(fullKey, value);
-
-      }
-
-    } catch(IOException e) {
-      e.printStackTrace();
+    private JSONObject levelGridData;
+    private JSONObject cameraData;
+    public LevelParser(String path) {
+        parseFile(path);
     }
-  }
-
-  public void printLevelData() {
-    for(Map.Entry<String, String> pair : levelData.entrySet()) {
-      System.out.println(pair.getKey() + ":" + pair.getValue());
+    private void parseFile(String path) {
+        JSONParser parser = new JSONParser();
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/resources/levels/" + path);
+            JSONObject fileData = (JSONObject) parser.parse(new InputStreamReader(inputStream));
+            levelGridData = (JSONObject) fileData.get("levelGrid");
+            cameraData = (JSONObject) fileData.get("camera");
+        } catch(IOException|ParseException e) {
+            e.printStackTrace();
+        } 
     }
-  }
+    public LevelGrid getLevelGrid() {
+        int cellHeight = (int) (long) levelGridData.get("cellHeight");
+        int cellWidth = (int) (long) levelGridData.get("cellWidth");
+        int rows = (int) (long) levelGridData.get("rows");
+        int columns = (int) (long) levelGridData.get("columns");
+        return new LevelGrid(cellHeight, cellWidth, rows, columns);
+    }
+    public Camera getCamera() {
+        int x = (int) (long) cameraData.get("x");
+        int y = (int) (long) cameraData.get("y");
+        return new Camera(x, y);
+    }
 }
 
