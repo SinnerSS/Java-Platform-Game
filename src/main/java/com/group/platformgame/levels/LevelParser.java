@@ -1,5 +1,6 @@
 package main.java.com.group.platformgame.levels;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,7 +10,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class LevelParser {
-    private JSONObject levelGridData;
+    private JSONObject levelGridDesc;
     private JSONObject cameraData;
     public LevelParser(String path) {
         parseFile(path);
@@ -19,18 +20,40 @@ public class LevelParser {
         try {
             InputStream inputStream = getClass().getResourceAsStream("/resources/levels/" + path);
             JSONObject fileData = (JSONObject) parser.parse(new InputStreamReader(inputStream));
-            levelGridData = (JSONObject) fileData.get("levelGrid");
+            levelGridDesc = (JSONObject) fileData.get("levelGrid");
             cameraData = (JSONObject) fileData.get("camera");
         } catch(IOException|ParseException e) {
             e.printStackTrace();
         } 
+
     }
-    public LevelGrid getLevelGrid() {
-        int cellHeight = (int) (long) levelGridData.get("cellHeight");
-        int cellWidth = (int) (long) levelGridData.get("cellWidth");
-        int rows = (int) (long) levelGridData.get("rows");
-        int columns = (int) (long) levelGridData.get("columns");
-        return new LevelGrid(cellHeight, cellWidth, rows, columns);
+    public int[][] getLevelGrid() {
+        int rows = (int) (long) levelGridDesc.get("rows");
+        int columns = (int) (long) levelGridDesc.get("columns");
+
+        int[][] gridData = new int[rows][columns];
+
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/resources/levels/" + (String) levelGridDesc.get("data"));
+            BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            int row = 0;
+            while((line = fileReader.readLine()) != null) {
+                String[] values = line.trim().split("\\s+");
+
+                for(int col = 0; col < columns; col++){
+                    gridData[row][col] = Integer.parseInt(values[col]);
+                }
+
+                row++;
+                
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return gridData;
     }
     public Camera getCamera() {
         int x = (int) (long) cameraData.get("x");
