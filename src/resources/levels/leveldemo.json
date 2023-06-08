@@ -1,0 +1,11 @@
+{
+  "levelGrid": {
+    "rows": 47,
+    "columns": 49,
+    "data": "leveldemo.data"
+  },
+  "camera": {
+    "x": 0,
+    "y": 0
+  }
+}

@@ -19,9 +19,6 @@
 *.tar.gz
 *.rar
 
-# Config files
-*.json
-
 # Test directory
 test
 
