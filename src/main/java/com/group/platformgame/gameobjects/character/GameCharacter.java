@@ -1,8 +1,10 @@
-package main.java.com.group.platformgame.gameobjects;
+package main.java.com.group.platformgame.gameobjects.character;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
+import main.java.com.group.platformgame.gameobjects.GameObject;
 
 public class GameCharacter extends GameObject {
   private BufferedImage animationBlock = null;
