@@ -1,12 +1,9 @@
 package main.java.com.group.platformgame.levels;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
 
 import main.java.com.group.platformgame.utils.IntRange;
+import main.java.com.group.platformgame.utils.Loader;
 
 public enum TextureMap {
   GROUND (new IntRange(1, 100), "Ground.png"),
@@ -54,20 +51,7 @@ public enum TextureMap {
 
   private void loadMap() {
     String path = resourcePath + fileName;
-    InputStream is = TextureMap.class.getResourceAsStream(path);
-    try {
-      mapImage = ImageIO.read(is);
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        is.close();
-      } catch (IOException|NullPointerException e) {
-        e.printStackTrace();
-        System.out.println(path);
-      }
-    }
+    mapImage = Loader.loadBufferedImage(path);
     mapCheck = true;
   }
 } 
