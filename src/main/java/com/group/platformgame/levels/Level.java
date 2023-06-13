@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.group.platformgame.core.GamePanel;
+import main.java.com.group.platformgame.utils.Loader;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -18,12 +19,18 @@ public class Level {
   private List<TextureMap> mapMem = new ArrayList<>();
   private int[][] gridData;
   private Camera camera;
+  private BufferedImage background;
   public Level(String levelFile) {
     LevelParser parser = new LevelParser(levelFile);
     gridData = parser.getLevelGrid();
     camera = parser.getCamera();
+    background = Loader.loadBufferedImage("/resources/assets/images/platforms/Background.png");
   }
   
+  public BufferedImage getBackground() {
+    return background;
+  }
+
   public Camera getCamera() {
     return camera;
   }
@@ -31,6 +38,8 @@ public class Level {
 public void render(Graphics2D g2d) {
   g2d.setColor(Color.WHITE);
   g2d.fillRect(0, 0, 1280, 1024);
+
+  g2d.drawImage(background, 0, 0, GamePanel.WIDTH, GamePanel.HEIGHT, null);
 
   double zoomFactor = camera.getZoom();
   int numRows = gridData.length - 1;
