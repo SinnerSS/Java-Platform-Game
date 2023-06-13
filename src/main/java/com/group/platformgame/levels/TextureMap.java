@@ -17,7 +17,7 @@ public enum TextureMap {
   BACKGROUND (new IntRange(550, 1000), "Background.png");
   
 
-  private static String resourcePath = "/resources/assets/images/platforms/";
+  public static String resourcePath = "/resources/assets/images/platforms/texture/";
 
   private final IntRange range;
   private final String fileName;
