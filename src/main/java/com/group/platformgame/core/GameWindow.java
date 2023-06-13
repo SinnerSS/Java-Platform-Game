@@ -4,8 +4,7 @@ import javax.swing.JFrame;
 
 public class GameWindow extends JFrame{
   public GameWindow() {
-    setSize(1280,1024);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setResizable(false);
     setVisible(true);
   }
 }
