@@ -13,12 +13,13 @@ public class GamePanel extends JPanel {
   public static final int HEIGHT = 1024;
   private Level level;
   public GamePanel(Level level) {
-    setPreferredSize(new Dimension(WIDTH, HEIGHT));
     this.level = level;
+    setPreferredSize(new Dimension(WIDTH, HEIGHT));
     addKeyListener(level.getCamera());
   }
   @Override
   public void paintComponent(Graphics g) {
+    super.paintComponent(g);
     Graphics2D g2d = (Graphics2D) g;
     level.render(g2d);
   }
