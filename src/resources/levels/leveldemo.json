@@ -7,5 +7,11 @@
   "camera": {
     "x": 0,
     "y": 0
+  },
+  "spawnData": {
+    "player": {
+      "x": 80,
+      "y": 80
+    }
   }
 }
