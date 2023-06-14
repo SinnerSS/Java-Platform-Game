@@ -4,6 +4,8 @@ package main.java.com.group.platformgame.gameobjects.character;
 import main.java.com.group.platformgame.utils.Loader;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public enum PlayerState {
@@ -23,11 +25,11 @@ public enum PlayerState {
     RUN("Run.png", 8),
     SLIDE("Slide.png", 10);
 
-    private static String animationPath = "/resources/assets/images/characters/player";
+    private String animationPath = "/resources/assets/images/characters/player/";
 
     private final String fileName;
     private BufferedImage spriteSheet;
-    private BufferedImage[] lstImg;
+    private List<BufferedImage> lstImg = new ArrayList<>();
     private int imgNum;
 
     PlayerState(String fileName, int imgNum) {
@@ -51,14 +53,21 @@ public enum PlayerState {
         Outer:
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                if (count >= this.imgNum) break Outer;
-                this.lstImg[count] = spriteSheet.getSubimage(j * 128, i * 64, 128, 64);
+                if (count >= imgNum) break Outer;
+                lstImg.add(spriteSheet.getSubimage(j * 128, i * 64, 128, 64));
                 count++;
             }
         }
     }
 
-    public BufferedImage[] getLstImg() {
-        return lstImg;
+    public BufferedImage getSpriteAtIdx(int idx) {
+        return lstImg.get(idx);
     }
+
+
+    public int getImgNum() {
+        return imgNum;
+    }
+
+    
 }
