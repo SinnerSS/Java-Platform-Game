@@ -1,6 +1,5 @@
 package main.java.com.group.platformgame.levels;
 
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -44,11 +43,9 @@ public class Level {
 
     g2d.drawImage(background, 0, 0, GamePanel.WIDTH, GamePanel.HEIGHT, null);
 
-    double zoomFactor = camera.getZoom();
-
     AffineTransform originalTransform = g2d.getTransform();
 
-    g2d.scale(zoomFactor, zoomFactor);
+    g2d = camera.applyTransformation(g2d);
 
     int numRows = gridData.length - 1;
     int numCols = gridData[0].length - 1;
@@ -77,9 +74,7 @@ public class Level {
         int xPos = col * CELL_WIDTH;
         int yPos = row * CELL_HEIGHT;
 
-        Point transformedPos = camera.applyTransformation(xPos, yPos);
-
-        g2d.drawImage(textureImage, transformedPos.x, transformedPos.y, null);
+        g2d.drawImage(textureImage, xPos, yPos, null);
       }
     }
     
