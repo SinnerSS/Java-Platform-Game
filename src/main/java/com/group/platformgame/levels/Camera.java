@@ -25,8 +25,13 @@ public class Camera {
     }
 
     public void update(Player player) {
-        x = player.getX() - GamePanel.WIDTH / 2;
-        y = player.getY() - GamePanel.HEIGHT / 2;
+
+        x = player.getX() + (96 / 2) - (GamePanel.WIDTH / 2) / (int)zoom;
+        y = player.getY() + (48 / 2) - (GamePanel.HEIGHT / 2) / (int)zoom;
+
+        //TODO: limit camera to level bounds
+        //x = Math.max(0, Math.min(x, (Level.CELL_WIDTH * levelWidth) - GamePanel.WIDTH / (int)zoom));
+        //y = Math.max(0, Math.min(y, (Level.CELL_HEIGHT * levelHeight) - GamePanel.HEIGHT / (int)zoom));
     }
 
     public Graphics2D applyTransformation(Graphics2D g2D) {
