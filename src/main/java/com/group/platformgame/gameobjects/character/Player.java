@@ -7,9 +7,7 @@ import main.java.com.group.platformgame.utils.PlayerHandle;
 public class Player extends GameCharacter {
 
   private final PlayerHandle ph = new PlayerHandle();
-  private int x;
-  private int y;
-  private int velocity = 200;
+  private int velocity = 3;
   private PlayerState state = PlayerState.IDLE;
 
   public Player(int x, int y) {
