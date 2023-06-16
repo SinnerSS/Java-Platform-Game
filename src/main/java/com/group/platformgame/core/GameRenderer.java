@@ -2,7 +2,7 @@ package main.java.com.group.platformgame.core;
 
 
 public class GameRenderer implements Runnable {
-  private final int FPS = 120;
+  private final int FPS = 60;
   private GamePanel gamePanel;
   
   public GameRenderer(GamePanel gamePanel) {
@@ -16,7 +16,9 @@ public class GameRenderer implements Runnable {
     while(true) {
       if(System.nanoTime() - currentFrameTime >= frameTime) {
         currentFrameTime = System.nanoTime();
-        gamePanel.repaint();
+        synchronized (gamePanel.getLevel().lock) {
+          gamePanel.repaint();
+        }
       }
     }
   }
