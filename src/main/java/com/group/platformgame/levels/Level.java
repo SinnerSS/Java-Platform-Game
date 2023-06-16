@@ -37,6 +37,11 @@ public class Level {
     return camera;
   }
 
+  public void update() {
+    player.update();
+    camera.update(player);
+  }
+
   public void render(Graphics2D g2d) {
     g2d.setColor(Color.WHITE);
     g2d.fillRect(0, 0, 1280, 1024);
