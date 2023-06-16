@@ -9,9 +9,13 @@ public class Camera {
     private int x;
     private int y;
     private float zoom = 3;
+    private int visibleHeight;
+    private int visibleWidth;
     public Camera(int x, int y) {
         this.x = x;
         this.y = y;
+        visibleHeight = (int) (GamePanel.HEIGHT / zoom);
+        visibleWidth = (int) (GamePanel.WIDTH / zoom);
     }
     public float getZoom() {
         return zoom;
@@ -23,7 +27,14 @@ public class Camera {
     public int getY() {
         return y;
     }
+    
 
+    public int getVisibleHeight() {
+        return visibleHeight;
+    }
+    public int getVisibleWidth() {
+        return visibleWidth;
+    }
     public void update(Player player) {
 
         x = player.getX() + (96 / 2) - (GamePanel.WIDTH / 2) / (int)zoom;
