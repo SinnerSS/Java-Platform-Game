@@ -15,12 +15,15 @@ public class GamePanel extends JPanel {
   public GamePanel(Level level) {
     this.level = level;
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
-    addKeyListener(level.getCamera());
+    addKeyListener(level.getPlayer().getPh());
   }
   @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D g2d = (Graphics2D) g;
     level.render(g2d);
+  }
+  public Level getLevel() {
+    return level;
   }
 }
