@@ -21,6 +21,9 @@ public class Level {
   private Camera camera;
   private BufferedImage background;
   private Player player;
+
+  public final Object lock = new Object();
+
   public Level(String levelFile) {
     LevelParser parser = new LevelParser(levelFile);
     gridData = parser.getLevelGrid();
