@@ -1,11 +1,11 @@
 package main.java.com.group.platformgame.core;
 
 
-public class GameLoop implements Runnable {
+public class GameRenderer implements Runnable {
   private final int FPS = 120;
   private GamePanel gamePanel;
   
-  public GameLoop(GamePanel gamePanel) {
+  public GameRenderer(GamePanel gamePanel) {
     this.gamePanel = gamePanel;
   }
 
