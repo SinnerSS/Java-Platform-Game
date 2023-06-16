@@ -55,14 +55,12 @@ public class Level {
     int numRows = gridData.length - 1;
     int numCols = gridData[0].length - 1;
 
-    int visibleWidth = GamePanel.WIDTH;
-    int visibleHeight = GamePanel.HEIGHT;
 
-    int startX = Math.max(0, (camera.getX() - visibleWidth / 2) / CELL_WIDTH);
-    int startY = Math.max(0, (camera.getY() - visibleHeight / 2) / CELL_HEIGHT);
+    int startX = Math.max(0, (camera.getX() - camera.getVisibleWidth()) / CELL_WIDTH);
+    int startY = Math.max(0, (camera.getY() - camera.getVisibleHeight()) / CELL_HEIGHT);
 
-    int endX = Math.min(numCols, (camera.getX() + visibleWidth / 2) / CELL_WIDTH + 1);
-    int endY = Math.min(numRows, (camera.getY() + visibleHeight / 2) / CELL_HEIGHT + 1);
+    int endX = Math.min(numCols, (camera.getX() + camera.getVisibleWidth()) / CELL_WIDTH + 1);
+    int endY = Math.min(numRows, (camera.getY() + camera.getVisibleHeight()) / CELL_HEIGHT + 1);
 
     for (int row = startY; row < endY; row++) {
       for (int col = startX; col < endX; col++) {
