@@ -3,6 +3,8 @@ package main.java.com.group.platformgame.core;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.image.VolatileImage;
 
 import javax.swing.JPanel;
 
@@ -20,8 +22,24 @@ public class GamePanel extends JPanel {
   @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
-    Graphics2D g2d = (Graphics2D) g;
-    level.render(g2d);
+    
+    GraphicsConfiguration gc = getGraphicsConfiguration();
+    VolatileImage volatileImage = gc.createCompatibleVolatileImage(WIDTH, HEIGHT);
+
+    do {
+      if(volatileImage.contentsLost()) {
+        if(volatileImage.validate(gc) == VolatileImage.IMAGE_INCOMPATIBLE) {
+          volatileImage = gc.createCompatibleVolatileImage(WIDTH, HEIGHT);
+        }
+      }
+
+      Graphics2D gVolatile = volatileImage.createGraphics();
+      level.render(gVolatile);
+      gVolatile.dispose();
+
+    } while(volatileImage.contentsLost());
+
+    g.drawImage(volatileImage, 0, 0, null);
   }
   public Level getLevel() {
     return level;
