@@ -15,6 +15,18 @@ public class GameCharacter extends GameObject<Rectangle> {
   }
 
   @Override
+  public void setX(int x) {
+    super.setX(x);
+    hitbox.x = x;
+  }
+
+  @Override
+  public void setY(int y) {
+    super.setX(y);
+    hitbox.x = y;
+  }
+
+  @Override
   public void update() {
   }
 
