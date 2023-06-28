@@ -1,6 +1,6 @@
 package main.java.com.group.platformgame.gameobjects.character;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -14,10 +14,12 @@ public class GameCharacter extends GameObject<Rectangle> {
     super(x, y, hitbox);
   }
 
+  @Override
   public void update() {
   }
 
-  public void render(Graphics g){
+  @Override
+  public void render(Graphics2D g){
 
   } 
 }
