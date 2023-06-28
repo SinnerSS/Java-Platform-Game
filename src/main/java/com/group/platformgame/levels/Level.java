@@ -7,16 +7,22 @@ import java.util.Map;
 
 import main.java.com.group.platformgame.core.GamePanel;
 import main.java.com.group.platformgame.gameobjects.character.Player;
+import main.java.com.group.platformgame.gameobjects.platform.Platform;
+import main.java.com.group.platformgame.gameobjects.platform.GroundTile;
 import main.java.com.group.platformgame.utils.Loader;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
 
 public class Level {
   public static int CELL_HEIGHT = 16;
   public static int CELL_WIDTH = 16;
 
   private Map<Integer, BufferedImage> textureCache = new HashMap<>();
+  private Platform<? extends Shape>[][] activePool;
   private int[][] gridData;
   private Camera camera;
   private BufferedImage background;
@@ -30,6 +36,8 @@ public class Level {
     camera = parser.getCamera();
     player = parser.getPlayer();
     background = Loader.loadBufferedImage("/resources/assets/images/platforms/Background.png");
+    activePool = new Platform<?>[gridData.length][gridData[0].length];
+    poolUpdate();
   }
 
   public BufferedImage getBackground() {
@@ -43,6 +51,7 @@ public class Level {
   public void update() {
     player.update();
     camera.update(player, this);
+    poolUpdate();
   }
 
   public void render(Graphics2D g2d) {
@@ -55,24 +64,9 @@ public class Level {
 
     g2d = camera.applyTransformation(g2d);
 
-    int numRows = gridData.length - 1;
-    int numCols = gridData[0].length - 1;
-
-    int startX = Math.max(0, (camera.getX() - camera.getVisibleWidth()) / CELL_WIDTH);
-    int startY = Math.max(0, (camera.getY() - camera.getVisibleHeight()) / CELL_HEIGHT);
-
-    int endX = Math.min(numCols, (camera.getX() + camera.getVisibleWidth()) / CELL_WIDTH + 1);
-    int endY = Math.min(numRows, (camera.getY() + camera.getVisibleHeight()) / CELL_HEIGHT + 1);
-
-    for (int row = startY; row < endY; row++) {
-      for (int col = startX; col < endX; col++) {
-        int textureKey = gridData[row][col];
-        BufferedImage textureImage = getTextureImage(textureKey);
-
-        int xPos = col * CELL_WIDTH;
-        int yPos = row * CELL_HEIGHT;
-
-        g2d.drawImage(textureImage, xPos, yPos, null);
+    for (int row = 0; row < activePool.length - 1; row++) {
+      for (int col = 0; col < activePool[0].length - 1; col++) {
+        if(activePool[row][col] != null) activePool[row][col].render(g2d);
       }
     }
 
@@ -103,5 +97,40 @@ public class Level {
     }
 
     return null;
+  }
+
+  private Point visibleGridStart() {
+    int startX = Math.max(0, (camera.getX() - camera.getVisibleWidth()) / CELL_WIDTH);
+    int startY = Math.max(0, (camera.getY() - camera.getVisibleHeight()) / CELL_HEIGHT);
+
+    return new Point(startX, startY);
+  }
+
+  private Point visibleGridEnd() {
+    int numRows = gridData.length - 1;
+    int numCols = gridData[0].length - 1;
+
+    int endX = Math.min(numCols, (camera.getX() + camera.getVisibleWidth()) / CELL_WIDTH + 1);
+    int endY = Math.min(numRows, (camera.getY() + camera.getVisibleHeight()) / CELL_HEIGHT + 1);
+
+    return new Point(endX, endY);
+  }
+
+  private void poolUpdate() {
+    Point start = visibleGridStart();
+    Point end = visibleGridEnd();
+
+      for (int row = 0; row < gridData.length; row++) {
+        for (int col = 0; col < gridData[0].length; col++) {
+          if(col >= start.x && col < end.x && row >= start.y && row < end.y) {
+            int x = col * CELL_HEIGHT;
+            int y = row * CELL_WIDTH;
+            activePool[row][col] = (Platform<Rectangle>) new GroundTile(x, y, new Rectangle(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
+          }
+          else 
+            activePool[row][col] = null;
+      }
+    }
+    
   }
 }
