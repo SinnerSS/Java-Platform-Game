@@ -1,6 +1,6 @@
 package main.java.com.group.platformgame.gameobjects;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Shape;
 
 
@@ -54,5 +54,5 @@ public abstract class GameObject<T extends Shape> {
 
   public abstract void update(); 
 
-  public abstract void render(Graphics g);
+  public abstract void render(Graphics2D g2D);
 }

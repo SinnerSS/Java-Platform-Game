@@ -15,12 +15,14 @@ public class Player extends GameCharacter {
     super(x, y, hitbox);
   }
 
+  @Override
   public void update() {
     if(ph.leftPressed) x -= velocity;
     if(ph.rightPressed) x += velocity;
     if(ph.leftPressed || ph.rightPressed) state = PlayerState.RUN;
   }
 
+  @Override
   public void render(Graphics2D g2D) {
     g2D.drawImage(state.getSpriteAtIdx(animationTick), x, y, null);
     animationTick++;
