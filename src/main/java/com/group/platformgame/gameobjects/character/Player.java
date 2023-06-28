@@ -20,6 +20,8 @@ public class Player extends GameCharacter {
     if(ph.leftPressed) x -= velocity;
     if(ph.rightPressed) x += velocity;
     if(ph.leftPressed || ph.rightPressed) state = PlayerState.RUN;
+    if(ph.noAction) state = PlayerState.IDLE;
+    hitbox.setLocation(x, y);
   }
 
   @Override
