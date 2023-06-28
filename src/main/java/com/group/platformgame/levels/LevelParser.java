@@ -1,5 +1,6 @@
 package main.java.com.group.platformgame.levels;
 
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,9 +67,11 @@ public class LevelParser {
     }
     public Player getPlayer() {
         JSONObject playerSpawn = (JSONObject) spawnData.get("player");
-        int x = (int) (long) playerSpawn.get("x");
-        int y = (int) (long) playerSpawn.get("y");
-        return new Player(x, y);
+        int x = (int) (long) ((JSONObject)playerSpawn.get("position")).get("x");
+        int y = (int) (long) ((JSONObject)playerSpawn.get("position")).get("y");
+        int width = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("width");
+        int height = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("height");
+        return new Player(x, y, new Rectangle(x, y, width, height));
     }
 }
 

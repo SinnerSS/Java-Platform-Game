@@ -1,6 +1,7 @@
 package main.java.com.group.platformgame.gameobjects.character;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import main.java.com.group.platformgame.utils.PlayerHandle;
 
@@ -10,8 +11,8 @@ public class Player extends GameCharacter {
   private int velocity = 3;
   private PlayerState state = PlayerState.IDLE;
 
-  public Player(int x, int y) {
-    super(x, y);
+  public Player(int x, int y, Rectangle hitbox) {
+    super(x, y, hitbox);
   }
 
   public void update() {
