@@ -10,8 +10,14 @@
   },
   "spawnData": {
     "player": {
-      "x": 80,
-      "y": 80
+      "position": {
+        "x": 49,
+        "y": 49
+      },
+      "hitbox": {
+        "width": 64,
+        "height": 128
+      }
     }
   }
 }
