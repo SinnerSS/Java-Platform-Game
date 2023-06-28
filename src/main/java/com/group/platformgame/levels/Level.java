@@ -42,7 +42,7 @@ public class Level {
 
   public void update() {
     player.update();
-    camera.update(player);
+    camera.update(player, this);
   }
 
   public void render(Graphics2D g2d) {
@@ -83,6 +83,10 @@ public class Level {
 
   public Player getPlayer() {
     return player;
+  }
+
+  public int[][] getGridData() {
+    return gridData;
   }
 
   private BufferedImage getTextureImage(int textureKey) {
