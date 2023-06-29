@@ -31,6 +31,7 @@ public class Player extends GameCharacter {
       facingRight = true;
     }
     if(ph.jumpPressed) {
+      y -= velocity;
       state = PlayerState.JUMP;
     }
     if(ph.attackPressed) {
@@ -41,10 +42,7 @@ public class Player extends GameCharacter {
     }
     if(ph.leftPressed || ph.rightPressed) state = PlayerState.RUN;
     if(ph.noAction) state = PlayerState.IDLE;
-<<<<<<< HEAD
     hitbox.setLocation(x, y);
-=======
->>>>>>> e6296cd (add more action)
   }
 
   @Override
