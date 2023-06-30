@@ -17,7 +17,7 @@ public class GamePanel extends JPanel {
   public GamePanel(Level level) {
     this.level = level;
     setPreferredSize(new Dimension(WIDTH, HEIGHT));
-    addKeyListener(level.getPlayer().getPh());
+    addKeyListener(level.getPlayer());
   }
   @Override
   public void paintComponent(Graphics g) {
