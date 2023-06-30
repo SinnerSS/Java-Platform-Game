@@ -9,10 +9,8 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import main.java.com.group.platformgame.utils.Rect;
-import main.java.com.group.platformgame.utils.Vector2D;
 
 public class Player extends GameCharacter implements KeyListener {
-  private Vector2D vel = new Vector2D(0, 0);
   private PlayerState state = PlayerState.IDLE;
   private boolean facingRight = true;
 
@@ -23,8 +21,8 @@ public class Player extends GameCharacter implements KeyListener {
   @Override
   public void update(double delta) {
     if(vel.x == 0 && vel.y == 0) state = PlayerState.IDLE;
-    pos.x += vel.x * delta;
-    pos.y += vel.y * delta;
+    setX(pos.x + vel.x * delta);
+    setY(pos.y + vel.y * delta);
     hitbox.pos = pos;
     hitbox.vel = vel;
   }
@@ -32,7 +30,7 @@ public class Player extends GameCharacter implements KeyListener {
   @Override
   public void render(Graphics2D g2D) {
     g2D.setColor(Color.RED);
-    g2D.drawRect((int) pos.x, (int) pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
+    g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
     g2D.setColor(Color.WHITE);
     BufferedImage sprite = state.getSpriteAtIdx(animationTick);
     if (!facingRight) {
@@ -64,11 +62,11 @@ public class Player extends GameCharacter implements KeyListener {
           state = PlayerState.RUN;
         }
         case KeyEvent.VK_W -> {
-          vel.y = -200;
+          vel.y = -100;
           state = PlayerState.JUMP;
         }
         case KeyEvent.VK_S -> {
-          vel.y = 200;
+          vel.y = 100;
         }
       }
     }
