@@ -128,8 +128,17 @@ public class Vector2D {
         y *= scalar;
     }
 
+    public void multiply(Vector2D v) {
+        x *= v.x;
+        y *= v.y;
+    }
+
     public Vector2D getMultiplied(double scalar) {
         return new Vector2D(x * scalar, y * scalar);
+    }
+
+    public Vector2D getMultiplied(Vector2D v) {
+        return new Vector2D(x * v.x, y * v.y);
     }
 
     public void divide(double scalar) {
