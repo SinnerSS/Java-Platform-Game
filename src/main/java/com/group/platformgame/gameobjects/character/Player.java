@@ -2,16 +2,17 @@ package main.java.com.group.platformgame.gameobjects.character;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
-import main.java.com.group.platformgame.utils.PlayerHandle;
 import main.java.com.group.platformgame.utils.Rect;
+import main.java.com.group.platformgame.utils.Vector2D;
 
-public class Player extends GameCharacter {
-  private final PlayerHandle ph = new PlayerHandle();
-  private int velocity = 3;
+public class Player extends GameCharacter implements KeyListener {
+  private Vector2D vel = new Vector2D(0, 0);
   private PlayerState state = PlayerState.IDLE;
   private boolean facingRight = true;
 
@@ -21,26 +22,9 @@ public class Player extends GameCharacter {
 
   @Override
   public void update(double delta) {
-    if(ph.leftPressed) {
-      pos.x -= velocity;
-      facingRight = false;
-    }
-    if(ph.rightPressed) {
-      pos.x += velocity;
-      facingRight = true;
-    }
-    if(ph.jumpPressed) {
-      pos.y -= velocity;
-      state = PlayerState.JUMP;
-    }
-    if(ph.attackPressed) {
-      state = PlayerState.ATTACKS;
-    }
-    if(ph.downPressed) {
-      pos.y += velocity;
-    }
-    if(ph.leftPressed || ph.rightPressed) state = PlayerState.RUN;
-    if(ph.noAction) state = PlayerState.IDLE;
+    if(vel.x == 0 && vel.y == 0) state = PlayerState.IDLE;
+    pos.x += vel.x;
+    pos.y += vel.y;
     hitbox.setLocation(pos.x, pos.y);
   }
 
@@ -61,7 +45,45 @@ public class Player extends GameCharacter {
     animationTick %= state.getImgNum();
   }
 
-  public PlayerHandle getPh() {
-    return ph;
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+      switch(e.getKeyCode()) {
+        case KeyEvent.VK_A -> {
+          vel.x = -2;
+          facingRight = false;
+          state = PlayerState.RUN;
+        }
+        case KeyEvent.VK_D -> {
+          vel.x = 2;
+          facingRight = true;
+          state = PlayerState.RUN;
+        }
+        case KeyEvent.VK_W -> {
+          vel.y = -2;
+          state = PlayerState.JUMP;
+        }
+        case KeyEvent.VK_S -> {
+          vel.y = 2;
+        }
+      }
+    }
+
+  @Override
+  public void keyReleased(KeyEvent e) {
+    switch(e.getKeyCode()) {
+      case KeyEvent.VK_A -> {
+        if(vel.x < 0) vel.x = 0;
+      }
+      case KeyEvent.VK_D -> {
+        if(vel.x > 0) vel.x = 0;
+      }
+      case KeyEvent.VK_W, KeyEvent.VK_S-> {
+        vel.y = 0;
+      }
+    }
   }
 }
