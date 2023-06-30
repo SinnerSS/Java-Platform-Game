@@ -124,7 +124,7 @@ public class Level {
           if(col >= start.x && col < end.x && row >= start.y && row < end.y) {
             int x = col * CELL_HEIGHT;
             int y = row * CELL_WIDTH;
-            activePool[row][col] = (Platform) new GroundTile(x, y, new Rect(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
+            if(gridData[row][col] > 0) activePool[row][col] = (Platform) new GroundTile(x, y, new Rect(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
           }
           else 
             activePool[row][col] = null;
