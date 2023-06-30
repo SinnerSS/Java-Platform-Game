@@ -7,6 +7,10 @@ public class Rect {
 
     public Rect[] contact = new Rect[4];
 
+    public Rect() {
+        super();
+    }
+
     public Rect(double x, double y, double width, double length) {
         pos = new Vector2D(x, y);
         size = new Vector2D(width, length);
