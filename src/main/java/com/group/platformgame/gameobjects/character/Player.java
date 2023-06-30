@@ -23,9 +23,10 @@ public class Player extends GameCharacter implements KeyListener {
   @Override
   public void update(double delta) {
     if(vel.x == 0 && vel.y == 0) state = PlayerState.IDLE;
-    pos.x += vel.x;
-    pos.y += vel.y;
-    hitbox.setLocation(pos.x, pos.y);
+    pos.x += vel.x * delta;
+    pos.y += vel.y * delta;
+    hitbox.pos = pos;
+    hitbox.vel = vel;
   }
 
   @Override
@@ -53,21 +54,21 @@ public class Player extends GameCharacter implements KeyListener {
     public void keyPressed(KeyEvent e) {
       switch(e.getKeyCode()) {
         case KeyEvent.VK_A -> {
-          vel.x = -2;
+          vel.x = -200;
           facingRight = false;
           state = PlayerState.RUN;
         }
         case KeyEvent.VK_D -> {
-          vel.x = 2;
+          vel.x = 200;
           facingRight = true;
           state = PlayerState.RUN;
         }
         case KeyEvent.VK_W -> {
-          vel.y = -2;
+          vel.y = -200;
           state = PlayerState.JUMP;
         }
         case KeyEvent.VK_S -> {
-          vel.y = 2;
+          vel.y = 200;
         }
       }
     }
