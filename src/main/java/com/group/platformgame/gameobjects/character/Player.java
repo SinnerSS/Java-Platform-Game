@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import main.java.com.group.platformgame.utils.Rect;
 
 public class Player extends GameCharacter implements KeyListener {
+  private int animationTiming = 0;
   private PlayerState state = PlayerState.IDLE;
   private boolean facingRight = true;
 
@@ -20,6 +21,7 @@ public class Player extends GameCharacter implements KeyListener {
 
   @Override
   public void update(double delta) {
+    vel.y = 300;
     if(vel.x == 0 && vel.y == 0) state = PlayerState.IDLE;
     setX(pos.x + vel.x * delta);
     setY(pos.y + vel.y * delta);
@@ -40,8 +42,12 @@ public class Player extends GameCharacter implements KeyListener {
       sprite = op.filter(sprite, null);
     }
     g2D.drawImage(sprite, (int) pos.x, (int) pos.y, null);
-    animationTick++;
-    animationTick %= state.getImgNum();
+    animationTiming += 1;
+    if(animationTiming >= 4) {
+      animationTiming = 0;
+      animationTick++;
+      animationTick %= state.getImgNum();
+    }
   }
 
     @Override
@@ -62,11 +68,11 @@ public class Player extends GameCharacter implements KeyListener {
           state = PlayerState.RUN;
         }
         case KeyEvent.VK_W -> {
-          vel.y = -100;
+          vel.y = -200;
           state = PlayerState.JUMP;
         }
         case KeyEvent.VK_S -> {
-          vel.y = 100;
+          vel.y = 200;
         }
       }
     }
