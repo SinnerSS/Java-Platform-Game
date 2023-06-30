@@ -48,8 +48,8 @@ public class Level {
     return camera;
   }
 
-  public void update() {
-    player.update();
+  public void update(double delta) {
+    player.update(delta);
     camera.update(player, this);
     poolUpdate();
   }

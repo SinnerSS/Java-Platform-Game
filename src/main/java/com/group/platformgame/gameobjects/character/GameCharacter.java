@@ -27,7 +27,7 @@ public class GameCharacter extends GameObject<Rectangle> {
   }
 
   @Override
-  public void update() {
+  public void update(double delta) {
   }
 
   @Override

@@ -52,7 +52,7 @@ public abstract class GameObject<T extends Shape> {
   }
 
 
-  public abstract void update(); 
+  public abstract void update(double delta); 
 
   public abstract void render(Graphics2D g2D);
 }
