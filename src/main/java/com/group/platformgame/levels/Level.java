@@ -3,6 +3,7 @@ package main.java.com.group.platformgame.levels;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,7 @@ public class Level {
     } while(!hitboxCollided.isEmpty());
   }
   private void collisionResolve(Rect playerHitbox, List<Rect> hitboxCollided) {
+    if(player.getVel().x < 0) Collections.reverse(hitboxCollided);
     for (Rect hitbox : hitboxCollided) {
       double penetrationX = Math.min(hitbox.pos.x + hitbox.size.x - playerHitbox.pos.x, playerHitbox.pos.x + playerHitbox.size.x - hitbox.pos.x);
       double penetrationY = Math.min(hitbox.pos.y + hitbox.size.y - playerHitbox.pos.y, playerHitbox.pos.y + playerHitbox.size.y - hitbox.pos.y);
