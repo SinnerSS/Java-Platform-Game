@@ -10,19 +10,18 @@ import main.java.com.group.platformgame.gameobjects.character.Player;
 import main.java.com.group.platformgame.gameobjects.platform.Platform;
 import main.java.com.group.platformgame.gameobjects.platform.GroundTile;
 import main.java.com.group.platformgame.utils.Loader;
+import main.java.com.group.platformgame.utils.Rect;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
 
 public class Level {
   public static int CELL_HEIGHT = 16;
   public static int CELL_WIDTH = 16;
 
   private Map<Integer, BufferedImage> textureCache = new HashMap<>();
-  private Platform<? extends Shape>[][] activePool;
+  private Platform[][] activePool;
   private int[][] gridData;
   private Camera camera;
   private BufferedImage background;
@@ -36,7 +35,7 @@ public class Level {
     camera = parser.getCamera();
     player = parser.getPlayer();
     background = Loader.loadBufferedImage("/resources/assets/images/platforms/Background.png");
-    activePool = new Platform<?>[gridData.length][gridData[0].length];
+    activePool = new Platform[gridData.length][gridData[0].length];
     poolUpdate();
   }
 
@@ -100,8 +99,8 @@ public class Level {
   }
 
   private Point visibleGridStart() {
-    int startX = Math.max(0, (camera.getX() - camera.getVisibleWidth()) / CELL_WIDTH);
-    int startY = Math.max(0, (camera.getY() - camera.getVisibleHeight()) / CELL_HEIGHT);
+    int startX = Math.max(0, ((int) camera.getX() - camera.getVisibleWidth()) / CELL_WIDTH);
+    int startY = Math.max(0, ((int) camera.getY() - camera.getVisibleHeight()) / CELL_HEIGHT);
 
     return new Point(startX, startY);
   }
@@ -110,8 +109,8 @@ public class Level {
     int numRows = gridData.length - 1;
     int numCols = gridData[0].length - 1;
 
-    int endX = Math.min(numCols, (camera.getX() + camera.getVisibleWidth()) / CELL_WIDTH + 1);
-    int endY = Math.min(numRows, (camera.getY() + camera.getVisibleHeight()) / CELL_HEIGHT + 1);
+    int endX = Math.min(numCols, ((int) camera.getX() + camera.getVisibleWidth()) / CELL_WIDTH + 1);
+    int endY = Math.min(numRows, ((int) camera.getY() + camera.getVisibleHeight()) / CELL_HEIGHT + 1);
 
     return new Point(endX, endY);
   }
@@ -125,7 +124,7 @@ public class Level {
           if(col >= start.x && col < end.x && row >= start.y && row < end.y) {
             int x = col * CELL_HEIGHT;
             int y = row * CELL_WIDTH;
-            activePool[row][col] = (Platform<Rectangle>) new GroundTile(x, y, new Rectangle(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
+            activePool[row][col] = (Platform) new GroundTile(x, y, new Rect(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
           }
           else 
             activePool[row][col] = null;

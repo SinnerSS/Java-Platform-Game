@@ -1,6 +1,5 @@
 package main.java.com.group.platformgame.levels;
 
-import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +10,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import main.java.com.group.platformgame.gameobjects.character.Player;
+import main.java.com.group.platformgame.utils.Rect;
 
 public class LevelParser {
     private JSONObject levelGridDesc;
@@ -61,17 +61,17 @@ public class LevelParser {
         return gridData;
     }
     public Camera getCamera() {
-        int x = (int) (long) cameraData.get("x");
-        int y = (int) (long) cameraData.get("y");
+        double x =  (double) cameraData.get("x");
+        double y =  (double) cameraData.get("y");
         return new Camera(x, y);
     }
     public Player getPlayer() {
         JSONObject playerSpawn = (JSONObject) spawnData.get("player");
-        int x = (int) (long) ((JSONObject)playerSpawn.get("position")).get("x");
-        int y = (int) (long) ((JSONObject)playerSpawn.get("position")).get("y");
+        double x = (double) ((JSONObject)playerSpawn.get("position")).get("x");
+        double y = (double) ((JSONObject)playerSpawn.get("position")).get("y");
         int width = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("width");
         int height = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("height");
-        return new Player(x, y, new Rectangle(x, y, width, height));
+        return new Player(x, y, new Rect(x, y, width, height));
     }
 }
 

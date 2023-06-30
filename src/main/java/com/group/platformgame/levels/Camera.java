@@ -4,28 +4,27 @@ import java.awt.Graphics2D;
 
 import main.java.com.group.platformgame.core.GamePanel;
 import main.java.com.group.platformgame.gameobjects.character.Player;
+import main.java.com.group.platformgame.utils.Vector2D;
 
 public class Camera {
-    private int x;
-    private int y;
+    private Vector2D pos;
     private float zoom = 3;
     private int visibleHeight;
     private int visibleWidth;
-    public Camera(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Camera(double x, double y) {
+        pos = new Vector2D(x, y);
         visibleHeight = (int) (GamePanel.HEIGHT / zoom);
         visibleWidth = (int) (GamePanel.WIDTH / zoom);
     }
     public float getZoom() {
         return zoom;
     }
-    public int getX() {
-        return x;
+    public double getX() {
+        return pos.x;
     }
 
-    public int getY() {
-        return y;
+    public double getY() {
+        return pos.y;
     }
     
 
@@ -37,18 +36,17 @@ public class Camera {
     }
     public void update(Player player, Level level) {
 
-        x = player.getX() + (96 / 2) - (GamePanel.WIDTH / 2) / (int)zoom;
-        y = player.getY() + (48 / 2) - (GamePanel.HEIGHT / 2) / (int)zoom;
+        pos.x = player.getX() + (96 / 2) - (GamePanel.WIDTH / 2) / zoom;
+        pos.y = player.getY() + (48 / 2) - (GamePanel.HEIGHT / 2) / zoom;
 
 
-        x = Math.max(0, Math.min(x, (Level.CELL_WIDTH * (level.getGridData()[0].length - 1)) - GamePanel.WIDTH / (int)zoom));
-        y = Math.max(0, Math.min(y, (Level.CELL_HEIGHT * (level.getGridData().length - 1)) - GamePanel.HEIGHT / (int)zoom));
+        pos.x = Math.max(0, Math.min(pos.x, (Level.CELL_WIDTH * (level.getGridData()[0].length - 1)) - GamePanel.WIDTH / zoom));
+        pos.y = Math.max(0, Math.min(pos.y, (Level.CELL_HEIGHT * (level.getGridData().length - 1)) - GamePanel.HEIGHT / zoom));
     }
 
     public Graphics2D applyTransformation(Graphics2D g2D) {
         g2D.scale(zoom, zoom);
-        g2D.translate(-x, -y);
-
+        g2D.translate(-pos.x , -pos.y);
         return g2D;
     }
 }
