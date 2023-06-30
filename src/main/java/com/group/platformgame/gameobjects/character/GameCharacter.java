@@ -5,8 +5,10 @@ import java.awt.image.BufferedImage;
 
 import main.java.com.group.platformgame.gameobjects.GameObject;
 import main.java.com.group.platformgame.utils.Rect;
+import main.java.com.group.platformgame.utils.Vector2D;
 
 public class GameCharacter extends GameObject {
+  protected Vector2D vel = new Vector2D(0, 0);
   protected BufferedImage spriteSheet;
   protected int animationTick = 0;
 
@@ -14,16 +16,13 @@ public class GameCharacter extends GameObject {
     super(x, y, hitbox);
   }
 
-  @Override
-  public void setX(double x) {
-    super.setX(x);
-    hitbox.pos.x = x;
+  public Vector2D getVel() {
+    return vel;
   }
 
-  @Override
-  public void setY(double y) {
-    super.setX(y);
-    hitbox.pos.y = y;
+  public void setVel(Vector2D vel) {
+    this.vel = vel;
+    hitbox.vel = vel;
   }
 
   @Override
