@@ -2,7 +2,9 @@ package main.java.com.group.platformgame.levels;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import main.java.com.group.platformgame.core.GamePanel;
@@ -49,8 +51,52 @@ public class Level {
 
   public void update(double delta) {
     player.update(delta);
+    checkCollision();
     camera.update(player, this);
     poolUpdate();
+  }
+
+  private void checkCollision() { 
+    List<Rect> hitboxCollided = new ArrayList<>(); 
+    Rect playerHitbox = player.getHitbox();
+
+    do {
+      hitboxCollided.clear();
+      int startX = (int) player.pos.x / CELL_WIDTH;
+      int startY = (int) player.pos.y / CELL_HEIGHT;
+
+      int endX = (int) (playerHitbox.pos.x + playerHitbox.getWidth()) / CELL_WIDTH + 2;
+      int endY = (int) (playerHitbox.pos.y + playerHitbox.getWidth()) / CELL_HEIGHT + 2;
+
+      for(int row = startY; row < endY; row++) {
+        for(int col = startX; col < endX; col++) {
+          if(activePool[row][col] != null) {
+            Rect cellHitbox = activePool[row][col].getHitbox();
+            if(cellHitbox.intersects(playerHitbox)) {
+              hitboxCollided.add(cellHitbox);
+            }
+          }
+        }
+      }
+      collisionResolve(playerHitbox, hitboxCollided);
+    } while(!hitboxCollided.isEmpty());
+  }
+  private void collisionResolve(Rect playerHitbox, List<Rect> hitboxCollided) {
+    for (Rect hitbox : hitboxCollided) {
+      double penetrationX = Math.min(hitbox.pos.x + hitbox.size.x - playerHitbox.pos.x, playerHitbox.pos.x + playerHitbox.size.x - hitbox.pos.x);
+      double penetrationY = Math.min(hitbox.pos.y + hitbox.size.y - playerHitbox.pos.y, playerHitbox.pos.y + playerHitbox.size.y - hitbox.pos.y);
+      if (penetrationX < penetrationY) {
+        if (playerHitbox.pos.x < hitbox.pos.x) 
+          player.setX(player.pos.x - penetrationX);
+        else
+          player.setX(player.pos.x + penetrationX);
+      } else {
+        if (playerHitbox.pos.y < hitbox.pos.y) 
+          player.setY(player.pos.y - penetrationY);
+        else
+          player.setY(player.pos.y + penetrationY);
+      }
+    }
   }
 
   public void render(Graphics2D g2d) {
@@ -68,6 +114,17 @@ public class Level {
         if(activePool[row][col] != null) activePool[row][col].render(g2d);
       }
     }
+
+    Rect playerHitbox = player.getHitbox();
+
+    int startX = (int) player.pos.x / CELL_WIDTH;
+    int startY = (int) player.pos.y / CELL_HEIGHT;
+
+    int endX = (int) ((playerHitbox.pos.x + playerHitbox.getWidth()) / CELL_WIDTH) + 2;
+    int endY = (int) ((playerHitbox.pos.y + playerHitbox.getWidth()) / CELL_HEIGHT) + 2;
+
+    g2d.drawLine(startX * CELL_WIDTH, startY * CELL_HEIGHT, startX * CELL_WIDTH, endY * CELL_HEIGHT);
+    g2d.drawLine(startX * CELL_WIDTH, startY * CELL_HEIGHT, endX * CELL_WIDTH, startY * CELL_HEIGHT);
 
     player.render(g2d);
 
