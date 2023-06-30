@@ -1,53 +1,52 @@
 package main.java.com.group.platformgame.gameobjects;
 
 import java.awt.Graphics2D;
-import java.awt.Shape;
+
+import main.java.com.group.platformgame.utils.Rect;
+import main.java.com.group.platformgame.utils.Vector2D;
 
 
-public abstract class GameObject<T extends Shape> {
-  protected int x;
-  protected int y;
-  protected T hitbox;
+public abstract class GameObject {
+  protected Vector2D pos;
+  protected Rect hitbox;
 
-  public GameObject(int x, int y) {
-    this.x = x;
-    this.y = y;
+  public GameObject(double x, double y) {
+    this(x, y, null);
   }
 
   
-  public GameObject(int x, int y, T hitbox) {
-    this.x = x;
-    this.y = y;
+  public GameObject(double x, double y, Rect hitbox) {
+    pos = new Vector2D(x, y);
     this.hitbox = hitbox;
   }
 
 
-  public int getX() {
-    return x;
+  public double getX() {
+    return pos.x;
   }
 
 
-  public void setX(int x) {
-    this.x = x;
+  public void setX(double x) {
+    pos.x = x;
   }
 
 
-  public int getY() {
-    return y;
+  public double getY() {
+    return pos.y;
   }
 
 
-  public void setY(int y) {
-    this.y = y;
+  public void setY(double y) {
+    pos.y = y;
   }
 
 
-  public T getHitbox() {
+  public Rect getHitbox() {
     return hitbox;
   }
 
 
-  public void setHitbox(T hitbox) {
+  public void setHitbox(Rect hitbox) {
     this.hitbox = hitbox;
   }
 
