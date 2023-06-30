@@ -12,13 +12,15 @@ public class GamePhysics implements Runnable {
 
   public void run() {
     double updateTime = 1000000000.0/simulationRate;
-    long currentUpdateTime = System.nanoTime();
+    long lastUpdateTime = System.nanoTime();
     
     while(true) {
-      if(System.nanoTime() - currentUpdateTime >= updateTime) {
-        currentUpdateTime = System.nanoTime();
+      long currentUpdateTime = System.nanoTime();
+      if(currentUpdateTime - lastUpdateTime >= updateTime) {
+        double delta = (currentUpdateTime - lastUpdateTime) / 1000000000.0;
+        lastUpdateTime = System.nanoTime();
         synchronized (level.lock) {
-          level.update();
+          level.update(delta);
         }
       }
     }

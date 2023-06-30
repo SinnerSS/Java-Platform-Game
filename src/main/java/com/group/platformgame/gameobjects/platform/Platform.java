@@ -1,6 +1,5 @@
 package main.java.com.group.platformgame.gameobjects.platform;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -16,7 +15,7 @@ public class Platform<T extends Shape> extends GameObject<T> {
   }
 
   @Override
-  public void update() {
+  public void update(double delta) {
   }
 
   @Override

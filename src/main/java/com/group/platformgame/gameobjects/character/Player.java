@@ -21,7 +21,7 @@ public class Player extends GameCharacter {
   }
 
   @Override
-  public void update() {
+  public void update(double delta) {
     if(ph.leftPressed) {
       x -= velocity;
       facingRight = false;
