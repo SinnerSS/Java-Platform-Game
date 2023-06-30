@@ -7,7 +7,7 @@ import main.java.com.group.platformgame.utils.Vector2D;
 
 
 public abstract class GameObject {
-  protected Vector2D pos;
+  public Vector2D pos;
   protected Rect hitbox;
 
   public GameObject(double x, double y) {
@@ -28,6 +28,7 @@ public abstract class GameObject {
 
   public void setX(double x) {
     pos.x = x;
+    hitbox.pos.x = x;
   }
 
 
@@ -38,6 +39,7 @@ public abstract class GameObject {
 
   public void setY(double y) {
     pos.y = y;
+    hitbox.pos.y = y;
   }
 
 
