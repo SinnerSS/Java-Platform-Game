@@ -69,7 +69,7 @@ public class Level {
       int endX = (int) (playerHitbox.pos.x + playerHitbox.getWidth()) / CELL_WIDTH + 2;
       int endY = (int) (playerHitbox.pos.y + playerHitbox.getWidth()) / CELL_HEIGHT + 2;
 
-      for(int row = startY; row < endY; row++) {
+      for(int row = endY - 1; row >= startY; row--) {
         for(int col = startX; col < endX; col++) {
           if(activePool[row][col] != null) {
             Rect cellHitbox = activePool[row][col].getHitbox();
@@ -93,10 +93,13 @@ public class Level {
         else
           player.setX(player.pos.x + penetrationX);
       } else {
-        if (playerHitbox.pos.y < hitbox.pos.y) 
+        if (playerHitbox.pos.y < hitbox.pos.y) {
+          if(player.isJumping) player.isJumping = false;
           player.setY(player.pos.y - penetrationY);
-        else
+        }
+        else {
           player.setY(player.pos.y + penetrationY);
+        }
       }
     }
   }
@@ -116,17 +119,6 @@ public class Level {
         if(activePool[row][col] != null) activePool[row][col].render(g2d);
       }
     }
-
-    Rect playerHitbox = player.getHitbox();
-
-    int startX = (int) player.pos.x / CELL_WIDTH;
-    int startY = (int) player.pos.y / CELL_HEIGHT;
-
-    int endX = (int) ((playerHitbox.pos.x + playerHitbox.getWidth()) / CELL_WIDTH) + 2;
-    int endY = (int) ((playerHitbox.pos.y + playerHitbox.getWidth()) / CELL_HEIGHT) + 2;
-
-    g2d.drawLine(startX * CELL_WIDTH, startY * CELL_HEIGHT, startX * CELL_WIDTH, endY * CELL_HEIGHT);
-    g2d.drawLine(startX * CELL_WIDTH, startY * CELL_HEIGHT, endX * CELL_WIDTH, startY * CELL_HEIGHT);
 
     player.render(g2d);
 
