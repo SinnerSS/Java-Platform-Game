@@ -1,5 +1,6 @@
 package main.java.com.group.platformgame.gameobjects.character;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,6 +15,7 @@ public class Player extends GameCharacter implements KeyListener {
   private PlayerState state = PlayerState.IDLE;
   private boolean facingRight = true;
   public boolean isJumping= false;
+  public int health = 100;
 
   public Player(double x, double y, Rect hitbox) {
     super(x, y, hitbox);
@@ -21,11 +23,11 @@ public class Player extends GameCharacter implements KeyListener {
 
   @Override
   public void update(double delta) {
-    if(vel.y < 250) vel.y += 25;
+    if(vel.y < 250) vel.y += 15;
+    else if(vel.y > 250) vel.y = 250;
     manageState();
     setX(pos.x + vel.x * delta);
     setY(pos.y + vel.y * delta);
-    hitbox.pos = pos;
     hitbox.vel = vel;
   }
 
@@ -37,9 +39,9 @@ public class Player extends GameCharacter implements KeyListener {
 
   @Override
   public void render(Graphics2D g2D) {
-    // g2D.setColor(Color.RED);
-    // g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
-    // g2D.setColor(Color.WHITE);
+    g2D.setColor(Color.RED);
+    g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
+    g2D.setColor(Color.WHITE);
     BufferedImage sprite = state.getSpriteAtIdx(animationTick);
     if (!facingRight) {
       AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
@@ -47,6 +49,7 @@ public class Player extends GameCharacter implements KeyListener {
       AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
       sprite = op.filter(sprite, null);
     }
+    g2D.drawString(String.valueOf(health) , (int) hitbox.getMiddleX() - 10, (int) hitbox.pos.y - 5);
     g2D.drawImage(sprite, (int) pos.x, (int) pos.y, null);
     animationTiming += 1;
     if(animationTiming >= 4) {
@@ -74,7 +77,7 @@ public class Player extends GameCharacter implements KeyListener {
         case KeyEvent.VK_W -> {
           if(!isJumping) {
             isJumping = true;
-            vel.y = -550;
+            vel.y = -500;
           }
         }
         // case KeyEvent.VK_S -> {

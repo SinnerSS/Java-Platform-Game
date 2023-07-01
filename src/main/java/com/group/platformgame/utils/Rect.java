@@ -50,5 +50,13 @@ public class Rect {
         size.x = r.size.x; 
         size.y = r.size.y;
     }
+
+    public double getMiddleX() {
+        return pos.x + size.x / 2;
+    }
+
+    public double getMiddleY() {
+        return pos.y + size.y / 2;
+    }
 }
 
