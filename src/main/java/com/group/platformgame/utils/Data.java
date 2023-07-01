@@ -99,7 +99,7 @@ public class Data {
                 case GOBLIN:
                     return null;
                 case MUSHROOM:
-                    return null;
+                    return new Vector2D(100, 0);
                 case UNDEAD:
                     return null;
                 case SUMMON_OBJECT:
