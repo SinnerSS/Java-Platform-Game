@@ -36,5 +36,19 @@ public class Rect {
         pos.x = x;
         pos.y = y;
     }
+
+    public void setBounds(double x, double y, double width, double height) {
+        pos.x = x;
+        pos.y = y;
+        size.x = width; 
+        size.y = height;
+    }
+
+    public void setBounds(Rect r) {
+        pos.x = r.pos.x;
+        pos.y = r.pos.y;
+        size.x = r.size.x; 
+        size.y = r.size.y;
+    }
 }
 
