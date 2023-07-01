@@ -18,6 +18,7 @@ public class Player extends GameCharacter implements KeyListener {
   public boolean isJumping = false;
   public boolean isAttacking = false;
   public int health = 100;
+  private boolean stun = false;
   private double stunTimer = 0;
   private double attackDuration = 0.5; 
   private double attackTimer = 0.0;
@@ -32,26 +33,29 @@ public class Player extends GameCharacter implements KeyListener {
     if(state == PlayerState.DEATH) return;
     if (stunTimer > 0) {
       stunTimer -= delta;
-      vel.x = 0; 
+      stun = true;
       isAttacking = false; 
 
       if (stunTimer <= 0) {
-        vel.x = 0;
+        stun = false;
         stunTimer = 0;
       }
     }
     if (isAttacking) {
-      vel.x = 0;
+      stun = true;
       attackTimer -= delta;
       if (attackTimer <= 0) {
         isAttacking = false;
         attackTimer = 0;
+        stun = false;
       }
     }
     if(vel.y < 250) vel.y += 15;
     else if(vel.y > 250) vel.y = 250;
-    setX(pos.x + vel.x * delta);
-    setY(pos.y + vel.y * delta);
+    if(!stun) {
+      setX(pos.x + vel.x * delta);
+      setY(pos.y + vel.y * delta);
+    }
     hitbox.vel = vel;
   }
 
@@ -136,12 +140,13 @@ public class Player extends GameCharacter implements KeyListener {
       //   vel.y = 0;
       // }
       case KeyEvent.VK_SPACE -> {
-        if (attackTimer <= 0) {
-          isAttacking = true;
-          attack = new Attack(new Rect(hitbox.getWidth(), hitbox.getHeight()), 50);
-          attack.pos = pos;
-          attackTimer = attackDuration;
-        }
+        if(!isJumping)
+          if (attackTimer <= 0) {
+            isAttacking = true;
+            attack = new Attack(new Rect(hitbox.getWidth(), hitbox.getHeight()), 50);
+            attack.pos = pos;
+            attackTimer = attackDuration;
+          }
       }
     }
   }
