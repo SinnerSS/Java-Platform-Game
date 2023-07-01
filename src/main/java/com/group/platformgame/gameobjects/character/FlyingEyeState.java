@@ -13,7 +13,7 @@ public enum FlyingEyeState {
     HURT("Hurt.png", 4),
     DEATH("Death.png", 4);
 
-    private String animationPath = "/resources/assets/images/characters/enemies/FlyingEye/";
+    private String animationPath = "/resources/assets/images/characters/enemies/flyingeye/";
 
     private final String fileName;
     private BufferedImage spriteSheet;
