@@ -1,6 +1,5 @@
 package main.java.com.group.platformgame.gameobjects.character;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,10 +11,16 @@ import main.java.com.group.platformgame.utils.Rect;
 
 public class Player extends GameCharacter implements KeyListener {
   private int animationTiming = 0;
+  private PlayerState previousState = PlayerState.IDLE;
   private PlayerState state = PlayerState.IDLE;
   private boolean facingRight = true;
-  public boolean isJumping= false;
+  private Attack attack;
+  public boolean isJumping = false;
+  public boolean isAttacking = false;
   public int health = 100;
+  private double stunTimer = 0;
+  private double attackDuration = 0.5; 
+  private double attackTimer = 0.0;
 
   public Player(double x, double y, Rect hitbox) {
     super(x, y, hitbox);
@@ -23,25 +28,62 @@ public class Player extends GameCharacter implements KeyListener {
 
   @Override
   public void update(double delta) {
+    manageState();
+    if(state == PlayerState.DEATH) return;
+    if (stunTimer > 0) {
+      stunTimer -= delta;
+      vel.x = 0; 
+      isAttacking = false; 
+
+      if (stunTimer <= 0) {
+        vel.x = 0;
+        stunTimer = 0;
+      }
+    }
+    if (isAttacking) {
+      vel.x = 0;
+      attackTimer -= delta;
+      if (attackTimer <= 0) {
+        isAttacking = false;
+        attackTimer = 0;
+      }
+    }
     if(vel.y < 250) vel.y += 15;
     else if(vel.y > 250) vel.y = 250;
-    manageState();
     setX(pos.x + vel.x * delta);
     setY(pos.y + vel.y * delta);
     hitbox.vel = vel;
   }
 
   private void manageState() {
-    if(isJumping) state =  PlayerState.JUMP;
+    if(health <= 0) state = PlayerState.DEATH;
+    else if(isJumping) state =  PlayerState.JUMP;
+    else if(isAttacking) state = PlayerState.ATTACKS;
     else if(vel.x != 0) state = PlayerState.RUN;
     else state = PlayerState.IDLE;
+    if (state != previousState) {
+      animationTick = 0; 
+      previousState = state;
+    }
+  }
+
+  public Attack getAttack() {
+    return attack;
   }
 
   @Override
   public void render(Graphics2D g2D) {
-    g2D.setColor(Color.RED);
-    g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
-    g2D.setColor(Color.WHITE);
+    // g2D.setColor(Color.RED);
+    // g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
+    // g2D.setColor(Color.WHITE);
+    if (isAttacking) {
+      g2D.drawRect((int) attack.pos.x, (int) attack.pos.y, (int) attack.getWidth(), (int) attack.getHeight());
+    }
+    if(animationTiming >= 4) {
+      animationTiming = 0;
+      animationTick++;
+      animationTick %= state.getImgNum();
+    }
     BufferedImage sprite = state.getSpriteAtIdx(animationTick);
     if (!facingRight) {
       AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
@@ -52,11 +94,6 @@ public class Player extends GameCharacter implements KeyListener {
     g2D.drawString(String.valueOf(health) , (int) hitbox.getMiddleX() - 10, (int) hitbox.pos.y - 5);
     g2D.drawImage(sprite, (int) pos.x, (int) pos.y, null);
     animationTiming += 1;
-    if(animationTiming >= 4) {
-      animationTiming = 0;
-      animationTick++;
-      animationTick %= state.getImgNum();
-    }
   }
 
     @Override
@@ -65,6 +102,7 @@ public class Player extends GameCharacter implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+      System.out.println(e);
       switch(e.getKeyCode()) {
         case KeyEvent.VK_A -> {
           vel.x = -200;
@@ -98,6 +136,14 @@ public class Player extends GameCharacter implements KeyListener {
       // case KeyEvent.VK_S-> {
       //   vel.y = 0;
       // }
+      case KeyEvent.VK_SPACE -> {
+        if (attackTimer <= 0) {
+          isAttacking = true;
+          attack = new Attack(new Rect(hitbox.getWidth(), hitbox.getHeight()), 50);
+          attack.pos = pos;
+          attackTimer = attackDuration;
+        }
+      }
     }
   }
 }
