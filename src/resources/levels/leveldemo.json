@@ -34,6 +34,36 @@
           "maxX": 512,
           "minX": 352
         }
+      },
+      {
+        "type": "flyingeye",
+        "position": {
+          "x": 384.0,
+          "y": 400.0
+        },
+        "hitbox": {
+          "width": 28,
+          "height": 22
+        },
+        "movementRange": {
+          "maxX": 544,
+          "minX": 384
+        }
+      },
+      {
+        "type": "mushroom",
+        "position": {
+          "x": 32.0,
+          "y": 540.0
+        },
+        "hitbox": {
+          "width": 25,
+          "height": 37
+        },
+        "movementRange": {
+          "maxX": 96,
+          "minX": 32
+        }
       }
     ]
   }

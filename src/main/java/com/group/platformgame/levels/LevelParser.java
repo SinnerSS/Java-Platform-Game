@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 
 import main.java.com.group.platformgame.gameobjects.character.Enemy;
 import main.java.com.group.platformgame.gameobjects.character.FlyingEye;
+import main.java.com.group.platformgame.gameobjects.character.Mushroom;
 import main.java.com.group.platformgame.gameobjects.character.Player;
 import main.java.com.group.platformgame.utils.Rect;
 
@@ -77,9 +78,10 @@ public class LevelParser {
         double y = (double) ((JSONObject)playerSpawn.get("position")).get("y");
         int width = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("width");
         int height = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("height");
-        return new Player(x, y, new Rect(x, y, width, height));
+        Player player = new Player(x, y, new Rect(x, y, width, height));
+        return player;
     }
-    public List<Enemy> getEnemies() {
+    public List<Enemy> getEnemies(Player player) {
         List<Enemy> enemies = new ArrayList<>();
         JSONArray enemySpawn = (JSONArray) spawnData.get("enemy");
         Iterator<?> iterator = enemySpawn.iterator();
@@ -91,7 +93,9 @@ public class LevelParser {
             int height = (int) (long) ((JSONObject)enemyObject.get("hitbox")).get("height");
             int maxX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("maxX");
             int minX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("minX");
-            if(((String) enemyObject.get("type")).equals("flyingeye")) enemies.add(new FlyingEye(x, y, new Rect(x, y, width, height), 300, 0, maxX, minX, getPlayer()));
+            if(((String) enemyObject.get("type")).equals("flyingeye")) enemies.add(new FlyingEye(x, y, new Rect(x, y, width, height), 300, 0, maxX, minX, player));
+            if(((String) enemyObject.get("type")).equals("mushroom")) enemies.add(new Mushroom(x, y, new Rect(x, y, width, height), 300, 0, maxX, minX, player));
+            //System.out.println(x + " " + y);
         }
         return enemies;
     }
