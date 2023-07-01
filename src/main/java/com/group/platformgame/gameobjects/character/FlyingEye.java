@@ -9,42 +9,62 @@ import main.java.com.group.platformgame.utils.Rect;
 import static main.java.com.group.platformgame.utils.Data.EnemyData.*;
 
 public class FlyingEye extends Enemy {
-
+    private FlyingEyeState previousState = FlyingEyeState.RUN;
     private FlyingEyeState state = FlyingEyeState.RUN;
     private Player player;
+    private double stunTimer = 0;
 
-    public FlyingEye(int x, int y, Rect hitbox, int limitX, int limitY, int xMax, int xMin, Player player) {
+    public FlyingEye(double x, double y, Rect hitbox, int limitX, int limitY, int xMax, int xMin, Player player) {
         super(x, y, hitbox, limitX, limitY, xMax, xMin, FLYING_EYE);
         this.player = player;
     }
     @Override
+    public void hurt(int damage) {
+        super.hurt(damage);
+        stunTimer = 1;
+        state = FlyingEyeState.HURT;
+    }
+    @Override
     public void update(double delta) {
-        if (currHealth > 0) {
-            if (Math.abs(player.getHitbox().pos.x - hitbox.pos.x) <= limitX && Math.abs(player.getHitbox().pos.y - hitbox.pos.y) <= limitY) {
-                // # attackMode
-                if (player.getHitbox().pos.x <= hitbox.pos.x)
-                    isLeft = true;
-                else
-                    isLeft = false;
-                if (isLeft) {
-                    if (hitbox.intersects(player.getHitbox())) {
-                        initAttackbox();
-                        state = FlyingEyeState.ATTACK;
+        if(health <= 0) {
+            animationTick = 0;
+            state = FlyingEyeState.DEATH;
+            return;
+        }
+        if(state != previousState) animationTick = 0;
+        if (stunTimer > 0) {
+            stunTimer -= delta;
+            vel.x = 0; 
+            if (stunTimer <= 0) {
+                vel.x = 200;
+                stunTimer = 0;
+            }
+        }
+        if (Math.abs(player.getHitbox().pos.x - hitbox.pos.x) <= limitX && Math.abs(player.getHitbox().pos.y - hitbox.pos.y) <= limitY) {
+            // # attackMode
+            if (player.getHitbox().pos.x <= hitbox.pos.x)
+                isLeft = true;
+            else
+                isLeft = false;
+            if (isLeft) {
+                if (hitbox.intersects(player.getHitbox())) {
+                    initAttackbox();
+                    state = FlyingEyeState.ATTACK;
 
-                    } else {
-                        state = FlyingEyeState.RUN;
-                        setX(pos.x - velocity.x * delta);
-                    }
                 } else {
-                    if (hitbox.intersects(player.getHitbox())) {
-                        initAttackbox();
-                        state = FlyingEyeState.ATTACK;
-                    } else {
-                        state = FlyingEyeState.RUN;
-                        setX(pos.x + velocity.x * delta);
-                    }
+                    state = FlyingEyeState.RUN;
+                    setX(pos.x - velocity.x * delta);
                 }
             } else {
+                if (hitbox.intersects(player.getHitbox())) {
+                    initAttackbox();
+                    state = FlyingEyeState.ATTACK;
+                } else {
+                    state = FlyingEyeState.RUN;
+                    setX(pos.x + velocity.x * delta);
+                }
+            }
+        } else {
                 // # basicMode
                 state = FlyingEyeState.RUN;
                 if (isLeft)
@@ -56,13 +76,11 @@ public class FlyingEye extends Enemy {
                     isLeft = true;
                 else if (pos.x <= xMin)
                     isLeft = false;
-            }
+        }
             // if (hitbox.intersects(player.getAttackbox())) {
             // state = Flying_eyeState.HURT;
             // currHealth -= player.getDamage();
             // }
-        } else
-            state = FlyingEyeState.DEATH;
         if (state != FlyingEyeState.ATTACK)
             attackbox.setBounds(0, 0, 0, 0);
 
@@ -81,8 +99,7 @@ public class FlyingEye extends Enemy {
             AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             sprite = op.filter(sprite, null);
         }
-        System.out.println("Width: " + sprite.getWidth());
-        System.out.println("Height: " + sprite.getHeight());
+        g2D.drawString(String.valueOf(health) , (int) hitbox.getMiddleX() - 10, (int) hitbox.pos.y - 5);
         g2D.drawImage(sprite, (int) pos.x, (int) pos.y, 28, 22, null);
         animationTick++;
         animationTick %= state.getImgNum() * 8;

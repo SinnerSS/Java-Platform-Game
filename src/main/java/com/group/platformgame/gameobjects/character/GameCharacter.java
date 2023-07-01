@@ -24,13 +24,14 @@ public class GameCharacter extends GameObject {
     this.vel = vel;
     hitbox.vel = vel;
   }
-
+  public void hurt(int damage) {
+    animationTick = 0;
+  }
   @Override
   public void update(double delta) {
   }
 
   @Override
   public void render(Graphics2D g){
-
   } 
 }
