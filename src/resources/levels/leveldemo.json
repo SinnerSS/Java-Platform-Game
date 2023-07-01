@@ -1,6 +1,6 @@
 {
   "levelGrid": {
-    "rows": 47,
+    "rows": 49,
     "columns": 49,
     "data": "leveldemo.data"
   },
@@ -18,6 +18,23 @@
         "width": 32,
         "height": 46      
       }
-    }
+    },
+    "enemy": [
+      {
+        "type": "flyingeye",
+        "position": {
+          "x": 80.0,
+          "y": 80.0
+        },
+        "hitbox": {
+          "width": 28,
+          "height": 22
+        },
+        "movementRange": {
+          "maxX": 200,
+          "minX": 50
+        }
+      }
+    ]
   }
 }
