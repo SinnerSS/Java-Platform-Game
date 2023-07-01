@@ -95,7 +95,6 @@ public class LevelParser {
             int minX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("minX");
             if(((String) enemyObject.get("type")).equals("flyingeye")) enemies.add(new FlyingEye(x, y, new Rect(x, y, width, height), 300, 0, maxX, minX, player));
             if(((String) enemyObject.get("type")).equals("mushroom")) enemies.add(new Mushroom(x, y, new Rect(x, y, width, height), 300, 0, maxX, minX, player));
-            //System.out.println(x + " " + y);
         }
         return enemies;
     }
