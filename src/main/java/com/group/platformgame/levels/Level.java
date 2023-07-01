@@ -5,10 +5,12 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import main.java.com.group.platformgame.core.GamePanel;
+import main.java.com.group.platformgame.gameobjects.character.Attack;
 import main.java.com.group.platformgame.gameobjects.character.Enemy;
 import main.java.com.group.platformgame.gameobjects.character.Player;
 import main.java.com.group.platformgame.gameobjects.platform.Platform;
@@ -58,6 +60,19 @@ public class Level {
     player.update(delta);
     for(Enemy enemy : enemies) {
       enemy.update(delta);
+    }
+    if(player.isAttacking) {
+      Attack playerAttack = player.getAttack();
+      for(Enemy enemy : enemies) {
+        if(playerAttack.intersects(enemy.getHitbox())) playerAttack.hit(enemy);
+      }
+    }
+    Iterator<Enemy> iterator = enemies.iterator();
+    while (iterator.hasNext()) {
+        Enemy enemy = iterator.next();
+        if (enemy.health <= 0) {
+            iterator.remove();
+        }
     }
     checkCollision();
     camera.update(player, this);
