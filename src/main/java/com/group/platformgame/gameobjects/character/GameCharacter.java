@@ -8,7 +8,7 @@ import main.java.com.group.platformgame.utils.Rect;
 import main.java.com.group.platformgame.utils.Vector2D;
 
 public class GameCharacter extends GameObject {
-  protected Vector2D vel = new Vector2D(0, 0);
+  protected Vector2D vel = new Vector2D(0, 250);
   protected BufferedImage spriteSheet;
   protected int animationTick = 0;
 
