@@ -27,7 +27,6 @@ public class Mushroom extends Enemy {
     }
     @Override
     public void update(double delta) {
-      System.out.println(player.getX() + " " + player.getY());
         if(health <= 0) { 
             animationTick = 0;
             state = MushroomState.DEATH;

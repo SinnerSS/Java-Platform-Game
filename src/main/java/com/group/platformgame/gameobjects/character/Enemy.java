@@ -34,12 +34,11 @@ public abstract class Enemy extends GameCharacter {
         this.hitbox = hitbox;
         height = getHeight(enemyType);
         vel = getVelocity(enemyType);
-        System.out.println(vel.toString());
         AttackDistance = getAttackDistance(enemyType);
         damage = Data.EnemyData.getDamage(enemyType);
         initAttackbox();
     }
-    
+
 
     @Override
     public void hurt(int damge) {
