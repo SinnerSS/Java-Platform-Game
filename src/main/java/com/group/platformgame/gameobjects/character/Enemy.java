@@ -56,4 +56,8 @@ public abstract class Enemy extends GameCharacter {
         return aniIndex;
     }
 
+    public int getDamage() {
+        return damage;
+    }
+
 }
