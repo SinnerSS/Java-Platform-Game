@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.com.group.platformgame.core.GamePanel;
+import main.java.com.group.platformgame.gameobjects.character.Enemy;
 import main.java.com.group.platformgame.gameobjects.character.Player;
 import main.java.com.group.platformgame.gameobjects.platform.Platform;
 import main.java.com.group.platformgame.gameobjects.platform.GroundTile;
@@ -16,6 +17,7 @@ import main.java.com.group.platformgame.utils.Loader;
 import main.java.com.group.platformgame.utils.Rect;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
@@ -23,6 +25,7 @@ public class Level {
   public static int CELL_HEIGHT = 16;
   public static int CELL_WIDTH = 16;
 
+  private List<Enemy> enemies = new ArrayList<>();
   private Map<Integer, BufferedImage> textureCache = new HashMap<>();
   private Platform[][] activePool;
   private int[][] gridData;
@@ -37,6 +40,7 @@ public class Level {
     gridData = parser.getLevelGrid();
     camera = parser.getCamera();
     player = parser.getPlayer();
+    enemies = parser.getEnemies();
     background = Loader.loadBufferedImage("/resources/assets/images/platforms/Background.png");
     activePool = new Platform[gridData.length][gridData[0].length];
     poolUpdate();
@@ -52,6 +56,9 @@ public class Level {
 
   public void update(double delta) {
     player.update(delta);
+    for(Enemy enemy : enemies) {
+      enemy.update(delta);
+    }
     checkCollision();
     camera.update(player, this);
     poolUpdate();
@@ -105,6 +112,7 @@ public class Level {
   }
 
   public void render(Graphics2D g2d) {
+    g2d.setFont(new Font("SansSerif", Font.PLAIN, 10));
     g2d.setColor(Color.WHITE);
     g2d.fillRect(0, 0, 1280, 1024);
 
@@ -121,6 +129,10 @@ public class Level {
     }
 
     player.render(g2d);
+
+    for(Enemy enemy : enemies) {
+      enemy.render(g2d);
+    }
 
     g2d.setTransform(originalTransform);
   }

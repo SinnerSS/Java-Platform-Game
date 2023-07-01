@@ -4,11 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import main.java.com.group.platformgame.gameobjects.character.Enemy;
+import main.java.com.group.platformgame.gameobjects.character.FlyingEye;
 import main.java.com.group.platformgame.gameobjects.character.Player;
 import main.java.com.group.platformgame.utils.Rect;
 
@@ -72,6 +78,22 @@ public class LevelParser {
         int width = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("width");
         int height = (int) (long) ((JSONObject)playerSpawn.get("hitbox")).get("height");
         return new Player(x, y, new Rect(x, y, width, height));
+    }
+    public List<Enemy> getEnemies() {
+        List<Enemy> enemies = new ArrayList<>();
+        JSONArray enemySpawn = (JSONArray) spawnData.get("enemy");
+        Iterator<?> iterator = enemySpawn.iterator();
+        while(iterator.hasNext()) {
+            JSONObject enemyObject = (JSONObject) iterator.next();
+            double x = (double) ((JSONObject) enemyObject.get("position")).get("x");
+            double y = (double) ((JSONObject) enemyObject.get("position")).get("y");
+            int width = (int) (long) ((JSONObject)enemyObject.get("hitbox")).get("width");
+            int height = (int) (long) ((JSONObject)enemyObject.get("hitbox")).get("height");
+            int maxX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("maxX");
+            int minX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("minX");
+            if(((String) enemyObject.get("type")).equals("flyingeye")) enemies.add(new FlyingEye(x, y, new Rect(x, y, width, height), 100, 0, maxX, minX, getPlayer()));
+        }
+        return enemies;
     }
 }
 
