@@ -153,7 +153,7 @@ public class Data {
                 case GOBLIN:
                     return 200;
                 case MUSHROOM:
-                    return 150;
+                    return 300;
                 case UNDEAD:
                     return 400;
                 case SUMMON_OBJECT:

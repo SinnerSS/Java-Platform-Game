@@ -1,7 +1,7 @@
 {
   "levelGrid": {
     "rows": 49,
-    "columns": 49,
+    "columns": 68,
     "data": "leveldemo.data"
   },
   "camera": {
@@ -46,8 +46,23 @@
           "height": 22
         },
         "movementRange": {
-          "maxX": 544,
+          "maxX": 520,
           "minX": 384
+        }
+      },
+      {
+        "type": "flyingeye",
+        "position": {
+          "x": 60.0,
+          "y": 680.0
+        },
+        "hitbox": {
+          "width": 28,
+          "height": 22
+        },
+        "movementRange": {
+          "maxX": 170,
+          "minX": 60
         }
       },
       {
@@ -63,6 +78,21 @@
         "movementRange": {
           "maxX": 96,
           "minX": 32
+        }
+      },
+      {
+        "type": "mushroom",
+        "position": {
+          "x": 48.0,
+          "y": 715.0
+        },
+        "hitbox": {
+          "width": 25,
+          "height": 37
+        },
+        "movementRange": {
+          "maxX": 130,
+          "minX": 48
         }
       }
     ]

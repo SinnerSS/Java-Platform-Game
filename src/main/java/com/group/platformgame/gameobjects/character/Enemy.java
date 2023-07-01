@@ -15,12 +15,12 @@ public abstract class Enemy extends GameCharacter {
     protected double xMax;
     protected double xMin;
     protected int maxHealth;
+    protected Attack attack;
     public int health;
-    protected int AttackDistance;
+    protected boolean stun = false;
     protected boolean isLeft = false;
     protected Player player;
     protected int damage;
-    protected Rect attackbox;
 
     public Enemy(double x, double y, Rect hitbox, double limitX, double limitY, double xMax, double xMin, int enemyType) {
         super(x, y, hitbox);
@@ -34,9 +34,7 @@ public abstract class Enemy extends GameCharacter {
         this.hitbox = hitbox;
         height = getHeight(enemyType);
         vel = getVelocity(enemyType);
-        AttackDistance = getAttackDistance(enemyType);
         damage = Data.EnemyData.getDamage(enemyType);
-        initAttackbox();
     }
 
 
@@ -44,17 +42,11 @@ public abstract class Enemy extends GameCharacter {
     public void hurt(int damge) {
         super.hurt(damge);
         health -= damage;
+        attack = null;
     }
 
-    protected void initAttackbox() {
-        if (!isLeft)
-            attackbox = new Rect(pos.x, pos.y, width + AttackDistance, height);
-        else
-            attackbox = new Rect(pos.x - AttackDistance, pos.y, width + AttackDistance, height);
-    }
-
-    public Rect getAttackbox() {
-        return attackbox;
+    public Attack getAttack() {
+        return attack;
     }
 
     public int getAniIndex() {

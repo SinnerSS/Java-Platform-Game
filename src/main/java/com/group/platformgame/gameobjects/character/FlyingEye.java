@@ -21,7 +21,8 @@ public class FlyingEye extends Enemy {
     @Override
     public void hurt(int damage) {
         super.hurt(damage);
-        stunTimer = 1;
+        health -= damage;
+        stunTimer = 0.5;
         state = FlyingEyeState.HURT;
     }
     @Override
@@ -38,8 +39,18 @@ public class FlyingEye extends Enemy {
             if (stunTimer <= 0) {
                 vel.x = 200;
                 stunTimer = 0;
+                stun = false;
             }
         }
+        if(attack != null) {
+            stun = true;
+            attack.setduration(attack.getduration() - delta);
+            if(attack.getduration() <= 0) {
+                stun = false;
+                attack = null;
+            }
+        }
+        if(stun) return;
         if (Math.abs(player.getHitbox().pos.x - pos.x) <= limitX && Math.abs(player.getHitbox().pos.y - pos.y) <= limitY) {
             // # attackMode
             if (player.getHitbox().pos.x <= hitbox.pos.x)
@@ -47,26 +58,16 @@ public class FlyingEye extends Enemy {
             else
                 isLeft = false;
             if (isLeft) {
-                if (hitbox.intersects(player.getHitbox())) {
-                    initAttackbox();
-                    state = FlyingEyeState.ATTACK;
-
-                } else {
-                    state = FlyingEyeState.RUN;
-                    setX(pos.x - vel.x * delta);
-                }
+                setX(pos.x - vel.x * delta);
             } else {
-                if (hitbox.intersects(player.getHitbox())) {
-                    initAttackbox();
-                    state = FlyingEyeState.ATTACK;
-                } else {
-                    state = FlyingEyeState.RUN;
                     setX(pos.x + vel.x * delta);
                 }
+            if (hitbox.intersects(player.getHitbox())) {
+                attack = new Attack(new Rect(hitbox.getWidth(), hitbox.getHeight()), 10, 0.5, 0.05);
+                attack.pos = pos;
             }
         } else {
                 // # basicMode
-                state = FlyingEyeState.RUN;
                 if (isLeft)
                     setX(pos.x - vel.x * delta);
                 else
@@ -77,20 +78,23 @@ public class FlyingEye extends Enemy {
                 else if (pos.x <= xMin)
                     isLeft = false;
         }
-            // if (hitbox.intersects(player.getAttackbox())) {
-            // state = Flying_eyeState.HURT;
-            // currHealth -= player.getDamage();
-            // }
-        // if (state != FlyingEyeState.ATTACK)
-        //     attackbox.setBounds(0, 0, 0, 0);
-
-        
+        manageState();
+    }
+    private void manageState() {
+        if(health <= 0) state = FlyingEyeState.DEATH;
+        else if(attack != null) state = FlyingEyeState.ATTACK;
+        else if(stunTimer <= 0) { 
+            state = FlyingEyeState.RUN;
+            vel.x = 200;
+        }
+        if (state != previousState) {
+        animationTick = 0; 
+        previousState = state;
+        }
     }
     @Override
     public void render(Graphics2D g2D) {
         g2D.setColor(Color.RED);
-        g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
-        // g2D.drawRect((int) attackbox.pos.x, (int) attackbox.pos.y, (int) attackbox.getWidth(), (int) attackbox.getHeight());
         g2D.setColor(Color.WHITE);
         BufferedImage sprite = state.getSpriteAtIdx(animationTick / 8);
         if (isLeft) {
@@ -99,7 +103,7 @@ public class FlyingEye extends Enemy {
             AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             sprite = op.filter(sprite, null);
         }
-        g2D.drawString(String.valueOf(health) , (int) hitbox.getMiddleX() - 10, (int) hitbox.pos.y - 5);
+        g2D.drawString(String.valueOf(health) , (int) hitbox.getMiddleX() - 5, (int) hitbox.pos.y - 5);
         g2D.drawImage(sprite, (int) pos.x, (int) pos.y, 28, 22, null);
         animationTick++;
         animationTick %= state.getImgNum() * 8;

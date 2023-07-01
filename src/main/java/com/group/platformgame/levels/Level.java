@@ -61,10 +61,16 @@ public class Level {
     for(Enemy enemy : enemies) {
       enemy.update(delta);
     }
-    if(player.isAttacking) {
+    if(player.getAttack() != null) {
       Attack playerAttack = player.getAttack();
       for(Enemy enemy : enemies) {
         if(playerAttack.intersects(enemy.getHitbox())) playerAttack.hit(enemy);
+      }
+    }
+    for(Enemy enemy : enemies) {
+      Attack enemyAttack = enemy.getAttack();
+      if(enemyAttack!= null) {
+        if(enemyAttack.intersects(player.getHitbox())) enemyAttack.hit(player);
       }
     }
     Iterator<Enemy> iterator = enemies.iterator();
@@ -95,9 +101,10 @@ public class Level {
         for(int col = startX; col < endX; col++) {
           if(activePool[row][col] != null) {
             Rect cellHitbox = activePool[row][col].getHitbox();
-            if(cellHitbox.intersects(playerHitbox)) {
-              hitboxCollided.add(cellHitbox);
-            }
+            if(cellHitbox != null)
+              if(cellHitbox.intersects(playerHitbox)) {
+                hitboxCollided.add(cellHitbox);
+              }
           }
         }
       }
@@ -202,7 +209,8 @@ public class Level {
           if(col >= start.x && col < end.x && row >= start.y && row < end.y) {
             int x = col * CELL_HEIGHT;
             int y = row * CELL_WIDTH;
-            if(gridData[row][col] > 0) activePool[row][col] = (Platform) new GroundTile(x, y, new Rect(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
+            if(gridData[row][col] > 0 && (gridData[row][col] < 450 || gridData[row][col] >= 550)) activePool[row][col] = (Platform) new GroundTile(x, y, new Rect(x, y, CELL_WIDTH, CELL_HEIGHT), getTextureImage(gridData[row][col]));
+            else activePool[row][col] = new Platform(x, y, null, getTextureImage(gridData[row][col]));
           }
           else 
             activePool[row][col] = null;

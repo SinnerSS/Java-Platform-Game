@@ -16,38 +16,38 @@ public class Player extends GameCharacter implements KeyListener {
   private boolean facingRight = true;
   private Attack attack;
   public boolean isJumping = false;
-  public boolean isAttacking = false;
   public int health = 100;
   private boolean stun = false;
   private double stunTimer = 0;
-  private double attackDuration = 0.5; 
-  private double attackTimer = 0.0;
 
   public Player(double x, double y, Rect hitbox) {
     super(x, y, hitbox);
   }
+  @Override
+  public void hurt(int damage) {
+    super.hurt(damage);
+    health -= damage;
+    stunTimer = 0.1;
+  }
 
   @Override
   public void update(double delta) {
-    manageState();
     if(state == PlayerState.DEATH) return;
     if (stunTimer > 0) {
       stunTimer -= delta;
       stun = true;
-      isAttacking = false; 
 
       if (stunTimer <= 0) {
         stun = false;
         stunTimer = 0;
       }
     }
-    if (isAttacking) {
+    if (attack != null) {
       stun = true;
-      attackTimer -= delta;
-      if (attackTimer <= 0) {
-        isAttacking = false;
-        attackTimer = 0;
+      attack.setduration(attack.getduration() - delta);
+      if (attack.getduration() <= 0) {
         stun = false;
+        attack = null;
       }
     }
     if(vel.y < 250) vel.y += 15;
@@ -57,13 +57,15 @@ public class Player extends GameCharacter implements KeyListener {
       setY(pos.y + vel.y * delta);
     }
     hitbox.vel = vel;
+    manageState();
   }
 
   private void manageState() {
     if(health <= 0) state = PlayerState.DEATH;
     else if(isJumping) state =  PlayerState.JUMP;
-    else if(isAttacking) state = PlayerState.ATTACKS;
+    else if(attack != null) state = PlayerState.ATTACKS;
     else if(vel.x != 0) state = PlayerState.RUN;
+    else if(stunTimer > 0) state = PlayerState.HURT;
     else state = PlayerState.IDLE;
     if (state != previousState) {
       animationTick = 0; 
@@ -80,9 +82,6 @@ public class Player extends GameCharacter implements KeyListener {
     // g2D.setColor(Color.RED);
     // g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
     // g2D.setColor(Color.WHITE);
-    if (isAttacking) {
-      g2D.drawRect((int) attack.pos.x, (int) attack.pos.y, (int) attack.getWidth(), (int) attack.getHeight());
-    }
     if(animationTiming >= 4) {
       animationTiming = 0;
       animationTick++;
@@ -140,13 +139,12 @@ public class Player extends GameCharacter implements KeyListener {
       //   vel.y = 0;
       // }
       case KeyEvent.VK_SPACE -> {
-        if(!isJumping)
-          if (attackTimer <= 0) {
-            isAttacking = true;
-            attack = new Attack(new Rect(hitbox.getWidth(), hitbox.getHeight()), 50);
-            attack.pos = pos;
-            attackTimer = attackDuration;
-          }
+        if(isJumping) return;
+        if(attack == null) {
+          attack = new Attack(new Rect(hitbox.getWidth(), hitbox.getHeight()), 75, 0.5);
+          attack.pos = pos;
+          return;
+        }
       }
     }
   }
