@@ -8,20 +8,19 @@ import main.java.com.group.platformgame.utils.Rect;
 
 import static main.java.com.group.platformgame.utils.Data.EnemyData.*;
 
-public class Flying_eye extends Enemy {
+public class FlyingEye extends Enemy {
 
-    private Flying_eyeState state = Flying_eyeState.RUN;
+    private FlyingEyeState state = FlyingEyeState.RUN;
     private Player player;
 
-    public Flying_eye(int x, int y, Rect hitbox, int limitX, int limitY, int xMax, int xMin, Player player) {
+    public FlyingEye(int x, int y, Rect hitbox, int limitX, int limitY, int xMax, int xMin, Player player) {
         super(x, y, hitbox, limitX, limitY, xMax, xMin, FLYING_EYE);
         this.player = player;
     }
-
-    public void update() {
+    @Override
+    public void update(double delta) {
         if (currHealth > 0) {
-            if (Math.abs(player.getHitbox().pos.x - hitbox.pos.x) <= limitX
-                    && Math.abs(player.getHitbox().pos.y - hitbox.pos.y) <= limitY) {
+            if (Math.abs(player.getHitbox().pos.x - hitbox.pos.x) <= limitX && Math.abs(player.getHitbox().pos.y - hitbox.pos.y) <= limitY) {
                 // # attackMode
                 if (player.getHitbox().pos.x <= hitbox.pos.x)
                     isLeft = true;
@@ -30,28 +29,28 @@ public class Flying_eye extends Enemy {
                 if (isLeft) {
                     if (hitbox.intersects(player.getHitbox())) {
                         initAttackbox();
-                        state = Flying_eyeState.ATTACK;
+                        state = FlyingEyeState.ATTACK;
 
                     } else {
-                        state = Flying_eyeState.RUN;
-                        pos.x -= velocity;
+                        state = FlyingEyeState.RUN;
+                        setX(pos.x - velocity.x * delta);
                     }
                 } else {
                     if (hitbox.intersects(player.getHitbox())) {
                         initAttackbox();
-                        state = Flying_eyeState.ATTACK;
+                        state = FlyingEyeState.ATTACK;
                     } else {
-                        state = Flying_eyeState.RUN;
-                        pos.x += velocity;
+                        state = FlyingEyeState.RUN;
+                        setX(pos.x + velocity.x * delta);
                     }
                 }
             } else {
                 // # basicMode
-                state = Flying_eyeState.RUN;
+                state = FlyingEyeState.RUN;
                 if (isLeft)
-                    pos.x -= velocity;
+                    setX(pos.x - velocity.x * delta);
                 else
-                    pos.x += velocity;
+                    setX(pos.x + velocity.x * delta);
 
                 if (pos.x >= xMax)
                     isLeft = true;
@@ -63,17 +62,17 @@ public class Flying_eye extends Enemy {
             // currHealth -= player.getDamage();
             // }
         } else
-            state = Flying_eyeState.DEATH;
-        updateHitbox(xDelta, yDelta);
-        if (state != Flying_eyeState.ATTACK)
+            state = FlyingEyeState.DEATH;
+        if (state != FlyingEyeState.ATTACK)
             attackbox.setBounds(0, 0, 0, 0);
-    }
 
-    public void render(Graphics g2D) {
+        
+    }
+    @Override
+    public void render(Graphics2D g2D) {
         g2D.setColor(Color.RED);
         g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
-        g2D.drawRect((int) attackbox.pos.x, (int) attackbox.pos.y, (int) attackbox.getWidth(),
-                (int) attackbox.getHeight());
+        g2D.drawRect((int) attackbox.pos.x, (int) attackbox.pos.y, (int) attackbox.getWidth(), (int) attackbox.getHeight());
         g2D.setColor(Color.WHITE);
         BufferedImage sprite = state.getSpriteAtIdx(animationTick / 8);
         if (isLeft) {
@@ -82,7 +81,9 @@ public class Flying_eye extends Enemy {
             AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             sprite = op.filter(sprite, null);
         }
-        g2D.drawImage(sprite, (int) pos.x, (int) pos.y, 150, 150, null);
+        System.out.println("Width: " + sprite.getWidth());
+        System.out.println("Height: " + sprite.getHeight());
+        g2D.drawImage(sprite, (int) pos.x, (int) pos.y, 28, 22, null);
         animationTick++;
         animationTick %= state.getImgNum() * 8;
     }

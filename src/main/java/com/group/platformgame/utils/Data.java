@@ -92,20 +92,20 @@ public class Data {
         }
 
         // # enemyVelocity
-        public static int getVelocity(int enemyType) {
+        public static Vector2D getVelocity(int enemyType) {
             switch (enemyType) {
                 case FLYING_EYE:
-                    return 2;
+                    return new Vector2D(200, 0);
                 case GOBLIN:
-                    return 3;
+                    return null;
                 case MUSHROOM:
-                    return 2;
+                    return null;
                 case UNDEAD:
-                    return 0;
+                    return null;
                 case SUMMON_OBJECT:
-                    return 0;
+                    return null;
                 default:
-                    return 0;
+                    return null;
             }
         }
 

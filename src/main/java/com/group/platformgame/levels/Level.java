@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.com.group.platformgame.core.GamePanel;
+import main.java.com.group.platformgame.gameobjects.character.Enemy;
+import main.java.com.group.platformgame.gameobjects.character.FlyingEye;
 import main.java.com.group.platformgame.gameobjects.character.Player;
 import main.java.com.group.platformgame.gameobjects.platform.Platform;
 import main.java.com.group.platformgame.gameobjects.platform.GroundTile;
@@ -24,6 +26,7 @@ public class Level {
   public static int CELL_WIDTH = 16;
 
   private Map<Integer, BufferedImage> textureCache = new HashMap<>();
+  private List<Enemy> enemies = new ArrayList<>();
   private Platform[][] activePool;
   private int[][] gridData;
   private Camera camera;
@@ -39,6 +42,7 @@ public class Level {
     player = parser.getPlayer();
     background = Loader.loadBufferedImage("/resources/assets/images/platforms/Background.png");
     activePool = new Platform[gridData.length][gridData[0].length];
+    enemies.add(new FlyingEye(80, 80, new Rect(80, 80, 28, 22), 48, 0, 200, 50, player));
     poolUpdate();
   }
 
@@ -51,6 +55,7 @@ public class Level {
   }
 
   public void update(double delta) {
+    enemies.get(0).update(delta);
     player.update(delta);
     checkCollision();
     camera.update(player, this);
@@ -121,6 +126,8 @@ public class Level {
     }
 
     player.render(g2d);
+
+    enemies.get(0).render(g2d);
 
     g2d.setTransform(originalTransform);
   }

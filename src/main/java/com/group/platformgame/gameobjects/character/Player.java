@@ -21,11 +21,11 @@ public class Player extends GameCharacter implements KeyListener {
 
   @Override
   public void update(double delta) {
-    if(vel.y < 250) vel.y += 25;
+    if(vel.y < 250) vel.y += 15;
+    else if(vel.y > 250) vel.y = 250;
     manageState();
     setX(pos.x + vel.x * delta);
     setY(pos.y + vel.y * delta);
-    hitbox.pos = pos;
     hitbox.vel = vel;
   }
 
@@ -74,7 +74,7 @@ public class Player extends GameCharacter implements KeyListener {
         case KeyEvent.VK_W -> {
           if(!isJumping) {
             isJumping = true;
-            vel.y = -550;
+            vel.y = -500;
           }
         }
         // case KeyEvent.VK_S -> {
