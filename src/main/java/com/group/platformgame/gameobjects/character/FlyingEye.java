@@ -40,7 +40,7 @@ public class FlyingEye extends Enemy {
                 stunTimer = 0;
             }
         }
-        if (Math.abs(player.getHitbox().pos.x - hitbox.pos.x) <= limitX && Math.abs(player.getHitbox().pos.y - hitbox.pos.y) <= limitY) {
+        if (Math.abs(player.getHitbox().pos.x - pos.x) <= limitX && Math.abs(player.getHitbox().pos.y - pos.y) <= limitY) {
             // # attackMode
             if (player.getHitbox().pos.x <= hitbox.pos.x)
                 isLeft = true;
