@@ -11,6 +11,16 @@ public class Rect {
         super();
     }
 
+    public Rect(Rect r) {
+        pos = r.pos;
+        size = r.size;
+        vel = r.vel;
+    }
+
+    public Rect(double width, double length) {
+        size = new Vector2D(width, length);
+    }
+
     public Rect(double x, double y, double width, double length) {
         pos = new Vector2D(x, y);
         size = new Vector2D(width, length);
