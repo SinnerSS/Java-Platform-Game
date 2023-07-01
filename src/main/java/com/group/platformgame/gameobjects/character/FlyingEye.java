@@ -53,7 +53,7 @@ public class FlyingEye extends Enemy {
 
                 } else {
                     state = FlyingEyeState.RUN;
-                    setX(pos.x - velocity.x * delta);
+                    setX(pos.x - vel.x * delta);
                 }
             } else {
                 if (hitbox.intersects(player.getHitbox())) {
@@ -61,16 +61,16 @@ public class FlyingEye extends Enemy {
                     state = FlyingEyeState.ATTACK;
                 } else {
                     state = FlyingEyeState.RUN;
-                    setX(pos.x + velocity.x * delta);
+                    setX(pos.x + vel.x * delta);
                 }
             }
         } else {
                 // # basicMode
                 state = FlyingEyeState.RUN;
                 if (isLeft)
-                    setX(pos.x - velocity.x * delta);
+                    setX(pos.x - vel.x * delta);
                 else
-                    setX(pos.x + velocity.x * delta);
+                    setX(pos.x + vel.x * delta);
 
                 if (pos.x >= xMax)
                     isLeft = true;
@@ -81,8 +81,8 @@ public class FlyingEye extends Enemy {
             // state = Flying_eyeState.HURT;
             // currHealth -= player.getDamage();
             // }
-        if (state != FlyingEyeState.ATTACK)
-            attackbox.setBounds(0, 0, 0, 0);
+        // if (state != FlyingEyeState.ATTACK)
+        //     attackbox.setBounds(0, 0, 0, 0);
 
         
     }
@@ -90,7 +90,7 @@ public class FlyingEye extends Enemy {
     public void render(Graphics2D g2D) {
         g2D.setColor(Color.RED);
         g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
-        g2D.drawRect((int) attackbox.pos.x, (int) attackbox.pos.y, (int) attackbox.getWidth(), (int) attackbox.getHeight());
+        // g2D.drawRect((int) attackbox.pos.x, (int) attackbox.pos.y, (int) attackbox.getWidth(), (int) attackbox.getHeight());
         g2D.setColor(Color.WHITE);
         BufferedImage sprite = state.getSpriteAtIdx(animationTick / 8);
         if (isLeft) {

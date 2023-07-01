@@ -2,7 +2,6 @@ package main.java.com.group.platformgame.gameobjects.character;
 
 import main.java.com.group.platformgame.utils.Data;
 import main.java.com.group.platformgame.utils.Rect;
-import main.java.com.group.platformgame.utils.Vector2D;
 
 import static main.java.com.group.platformgame.utils.Data.EnemyData.*;
 
@@ -11,7 +10,6 @@ public abstract class Enemy extends GameCharacter {
     protected int aniIndex, enemyType;
     protected int aniSpeed = 20;
     protected int width, height;
-    protected Vector2D velocity;
     protected double limitX;
     protected double limitY;
     protected double xMax;
@@ -35,11 +33,13 @@ public abstract class Enemy extends GameCharacter {
         this.health = maxHealth;
         this.hitbox = hitbox;
         height = getHeight(enemyType);
-        velocity = getVelocity(enemyType);
+        vel = getVelocity(enemyType);
+        System.out.println(vel.toString());
         AttackDistance = getAttackDistance(enemyType);
         damage = Data.EnemyData.getDamage(enemyType);
         initAttackbox();
     }
+    
 
     @Override
     public void hurt(int damge) {
