@@ -22,6 +22,7 @@ public class Mushroom extends Enemy {
     @Override
     public void hurt(int damage) {
         super.hurt(damage);
+        health -= damage;
         stunTimer = 0.5;
         state = MushroomState.HURT;
     }
@@ -37,7 +38,7 @@ public class Mushroom extends Enemy {
             stunTimer -= delta;
             vel.x = 0; 
             if (stunTimer <= 0) {
-                vel.x = 200;
+                vel.x = 100;
                 stunTimer = 0;
             }
         }
@@ -49,7 +50,6 @@ public class Mushroom extends Enemy {
                 isLeft = false;
             if (isLeft) {
                 if (hitbox.intersects(player.getHitbox())) {
-                    initAttackbox();
                     state = MushroomState.ATTACK;
 
                 } else {
@@ -58,7 +58,6 @@ public class Mushroom extends Enemy {
                 }
             } else {
                 if (hitbox.intersects(player.getHitbox())) {
-                    initAttackbox();
                     state = MushroomState.ATTACK;
                 } else {
                     state = MushroomState.RUN;
@@ -87,10 +86,6 @@ public class Mushroom extends Enemy {
     }
     @Override
     public void render(Graphics2D g2D) {
-        g2D.setColor(Color.RED);
-        g2D.drawRect((int) hitbox.pos.x, (int) hitbox.pos.y, (int) hitbox.getWidth(), (int) hitbox.getHeight());
-        // g2D.drawRect((int) attackbox.pos.x, (int) attackbox.pos.y, (int) attackbox.getWidth(), (int) attackbox.getHeight());
-        g2D.setColor(Color.WHITE);
         BufferedImage sprite = state.getSpriteAtIdx(animationTick / 8);
         if (isLeft) {
             AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
@@ -99,6 +94,7 @@ public class Mushroom extends Enemy {
             sprite = op.filter(sprite, null);
         }
         g2D.drawImage(sprite, (int) pos.x, (int) pos.y, 25, 37, null);
+        g2D.drawString(String.valueOf(health) , (int) hitbox.getMiddleX() - 5, (int) hitbox.pos.y);
         animationTick++;
         animationTick %= state.getImgNum() * 8;
     }

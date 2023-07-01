@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import main.java.com.group.platformgame.levels.Level;
 
 public class GamePanel extends JPanel {
-  public static final int WIDTH = 1280;
-  public static final int HEIGHT = 1024;
+  public static final int WIDTH = 1920;
+  public static final int HEIGHT = 1080;
   private Level level;
   public GamePanel(Level level) {
     this.level = level;
