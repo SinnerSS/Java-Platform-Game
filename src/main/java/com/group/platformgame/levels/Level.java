@@ -42,7 +42,7 @@ public class Level {
     gridData = parser.getLevelGrid();
     camera = parser.getCamera();
     player = parser.getPlayer();
-    enemies = parser.getEnemies();
+    enemies = parser.getEnemies(player);
     background = Loader.loadBufferedImage("/resources/assets/images/platforms/Background.png");
     activePool = new Platform[gridData.length][gridData[0].length];
     poolUpdate();
