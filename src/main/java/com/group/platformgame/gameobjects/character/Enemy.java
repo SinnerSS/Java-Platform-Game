@@ -17,7 +17,7 @@ public abstract class Enemy extends GameCharacter {
     protected double xMax;
     protected double xMin;
     protected int maxHealth;
-    public int currHealth;
+    public int health;
     protected int AttackDistance;
     protected boolean isLeft = false;
     protected Player player;
@@ -32,13 +32,19 @@ public abstract class Enemy extends GameCharacter {
         this.xMin = xMin;
         this.enemyType = enemyType;
         this.maxHealth = getMaxHeath(enemyType);
-        this.currHealth = maxHealth;
+        this.health = maxHealth;
         this.hitbox = hitbox;
         height = getHeight(enemyType);
         velocity = getVelocity(enemyType);
         AttackDistance = getAttackDistance(enemyType);
         damage = Data.EnemyData.getDamage(enemyType);
         initAttackbox();
+    }
+
+    @Override
+    public void hurt(int damge) {
+        super.hurt(damge);
+        health -= damage;
     }
 
     protected void initAttackbox() {
