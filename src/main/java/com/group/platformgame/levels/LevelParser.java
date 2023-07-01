@@ -91,7 +91,7 @@ public class LevelParser {
             int height = (int) (long) ((JSONObject)enemyObject.get("hitbox")).get("height");
             int maxX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("maxX");
             int minX = (int) (long) ((JSONObject)enemyObject.get("movementRange")).get("minX");
-            if(((String) enemyObject.get("type")).equals("flyingeye")) enemies.add(new FlyingEye(x, y, new Rect(x, y, width, height), 100, 0, maxX, minX, getPlayer()));
+            if(((String) enemyObject.get("type")).equals("flyingeye")) enemies.add(new FlyingEye(x, y, new Rect(x, y, width, height), 300, 0, maxX, minX, getPlayer()));
         }
         return enemies;
     }
